@@ -1,4 +1,7 @@
 using MealPlanner.Data;
+using MealPlanner.Interfaces;
+using MealPlanner.Logic;
+using MealPlanner.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +22,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+builder.Services.AddScoped<IRecipeLogic, RecipeLogic>();
+builder.Services.AddScoped<IMealLogic, MealLogic>();
 
 var app = builder.Build();
 
