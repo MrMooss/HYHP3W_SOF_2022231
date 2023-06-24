@@ -8,6 +8,7 @@ namespace MealPlanner.Data
     {
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<SiteUser> Users { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
