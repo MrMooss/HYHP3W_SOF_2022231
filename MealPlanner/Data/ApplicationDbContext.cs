@@ -17,7 +17,8 @@ namespace MealPlanner.Data
         {
             builder.Entity<Meal>()
                 .HasOne(t => t.Recipe)
-                .WithOne(t => t.Meal);
+                .WithOne(t => t.Meal)
+                .HasForeignKey<Recipe>(t => t.MealId);
             base.OnModelCreating(builder);
         }
     }
