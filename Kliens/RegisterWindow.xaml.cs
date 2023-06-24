@@ -22,6 +22,7 @@ namespace Kliens
         public RegisterWindow()
         {
             InitializeComponent();
+            // a
         }
     }
 }
