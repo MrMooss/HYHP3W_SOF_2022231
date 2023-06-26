@@ -39,7 +39,14 @@ namespace MealPlanner.Controllers
         public void CreateMeal([FromBody] MealDTO mealDTO)
         {
             Meal meal = MapDTOToMeal(mealDTO);
-            Recipe recipe = new Recipe() { Name = mealDTO.Name, Description = mealDTO.RecipeDescription, MealId = meal.Id, Meal = meal };
+            Recipe recipe = new Recipe
+            {
+                Name = mealDTO.Name,
+                Description = mealDTO.RecipeDescription,
+                Meal = meal
+            };
+            meal.Recipe = recipe;
+
             mealLogic.Create(meal);
             recipeLogic.Create(recipe);
         }
@@ -49,7 +56,11 @@ namespace MealPlanner.Controllers
         {
             Meal existingMeal = mealLogic.Read(mealDTO.Id);
             Meal updatedMeal = MapDTOToMeal(mealDTO, existingMeal);
+            Recipe existingRecipe = recipeLogic.Read(existingMeal.Recipe.Id);
+            Recipe updatedRecipe = MapDTOToRecipe(mealDTO, existingRecipe, existingMeal);
+
             mealLogic.Update(updatedMeal);
+            recipeLogic.Update(updatedRecipe);
         }
 
         [HttpDelete("{id}")]
@@ -89,15 +100,16 @@ namespace MealPlanner.Controllers
             meal.ImageUrl = mealDTO.ImageUrl;
             meal.ConsumptionDate = mealDTO.ConsumptionDate;
             meal.MealType = mealDTO.MealType;
-
-            if (existingMeal == null)
-            {
-                // Create a new Recipe object if it doesn't exist
-                meal.Recipe = new Recipe();
-            }
-            meal.Recipe.Name = mealDTO.Name;
-            meal.Recipe.Description = mealDTO.RecipeDescription;
             return meal;
+        }
+
+        private Recipe MapDTOToRecipe(MealDTO mealDTO, Recipe existingRecipe = null, Meal existingMeal = null)
+        {
+            Recipe recipe = existingRecipe ?? new Recipe();
+            recipe.Name = mealDTO.Name;
+            recipe.Description = mealDTO.RecipeDescription;
+            recipe.Meal = existingMeal;
+            return recipe;
         }
     }
 }

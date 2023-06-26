@@ -1,4 +1,5 @@
-﻿using MealPlanner.Models;
+﻿using Common;
+using MealPlanner.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
