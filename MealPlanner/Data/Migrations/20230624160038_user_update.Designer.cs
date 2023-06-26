@@ -4,6 +4,7 @@ using MealPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealPlanner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230624160038_user_update")]
+    partial class user_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.18")
+                .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -48,17 +50,6 @@ namespace MealPlanner.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Meals");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a3969a54-99f4-4dca-a725-fbd91c7c61b6",
-                            ConsumptionDate = new DateTime(2023, 6, 1, 7, 22, 16, 0, DateTimeKind.Unspecified),
-                            Description = "Nagyon teszt",
-                            ImageUrl = "a3969a54-99f4-4dca-a725-fbd91c7c61b6_Test Meal",
-                            MealType = 0,
-                            Name = "Test Meal"
-                        });
                 });
 
             modelBuilder.Entity("MealPlanner.Models.Recipe", b =>
@@ -84,15 +75,6 @@ namespace MealPlanner.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Recipes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "d270f8f3-3c6e-4dba-b8bc-5744410617db",
-                            Description = "Teszt recept leírása",
-                            MealId = "a3969a54-99f4-4dca-a725-fbd91c7c61b6",
-                            Name = "Test Recipe"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -120,20 +102,6 @@ namespace MealPlanner.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "NormalUser",
-                            NormalizedName = "NORMALUSER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -326,33 +294,17 @@ namespace MealPlanner.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("SiteUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "323b36d2-ede2-4c14-8d6e-19b5c2eb5516",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d6c47f8c-da63-4188-9195-9968a10081d3",
-                            Email = "test@test.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "TESTUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKgzLbvY/knWql5DXGcvjPKXYvWj9Eh9Dkt8tG08HK023K2RVl+otMLCsyAOuRAdrA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "160ec5f7-455b-4392-ad54-795eb11b484b",
-                            TwoFactorEnabled = false,
-                            UserName = "testuser",
-                            ProfilePictureUrl = "323b36d2-ede2-4c14-8d6e-19b5c2eb5516_testuser"
-                        });
                 });
 
             modelBuilder.Entity("MealPlanner.Models.Recipe", b =>
                 {
-                    b.HasOne("MealPlanner.Models.Meal", null)
+                    b.HasOne("MealPlanner.Models.Meal", "Meal")
                         .WithOne("Recipe")
                         .HasForeignKey("MealPlanner.Models.Recipe", "MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Meal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
