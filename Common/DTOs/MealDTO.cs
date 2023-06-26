@@ -13,6 +13,6 @@ namespace Common.DTOs
         public string ImageUrl { get; set; }
         public DateTime ConsumptionDate { get; set; }
         public MealType MealType { get; set; }
-        public virtual RecipeDTO Recipe { get; set; }
+        public string RecipeDescription { get; set; }
     }
 }

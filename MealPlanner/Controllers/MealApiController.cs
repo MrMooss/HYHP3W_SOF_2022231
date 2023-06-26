@@ -22,7 +22,6 @@ namespace MealPlanner.Controllers
         [HttpGet]
         public IEnumerable<MealDTO> GetAllMeals()
         {
-
             IList<Meal> meals = mealLogic.ReadAll();
             IList<MealDTO> mealDTOs = MapMealsToDTOs(meals);
             return mealDTOs;
@@ -31,21 +30,21 @@ namespace MealPlanner.Controllers
         [HttpGet("{id}")]
         public MealDTO? GetMeal(string id)
         {
-
             Meal meal = mealLogic.Read(id);
             MealDTO mealDTO = MapMealToDTO(meal);
             return mealDTO;
-
         }
 
         [HttpPost]
         public void CreateMeal([FromBody] MealDTO mealDTO)
         {
             Meal meal = MapDTOToMeal(mealDTO);
-            Meal createdMeal = mealLogic.Create(meal);
+            Recipe recipe = new Recipe() { Name = mealDTO.Name, Description = mealDTO.RecipeDescription, MealId = meal.Id, Meal = meal };
+            mealLogic.Create(meal);
+            recipeLogic.Create(recipe);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public void UpdateMeal([FromBody] UpdateMealDTO mealDTO)
         {
             Meal existingMeal = mealLogic.Read(mealDTO.Id);
@@ -56,7 +55,7 @@ namespace MealPlanner.Controllers
         [HttpDelete("{id}")]
         public void DeleteMeal(string id)
         {
-                mealLogic.Delete(id);
+            mealLogic.Delete(id);
         }
 
         private IList<MealDTO> MapMealsToDTOs(IList<Meal> meals)
@@ -73,47 +72,33 @@ namespace MealPlanner.Controllers
         {
             return new MealDTO
             {
-                Id = meal.Id,
                 Name = meal.Name,
                 Description = meal.Description,
                 ImageUrl = meal.ImageUrl,
                 ConsumptionDate = meal.ConsumptionDate,
                 MealType = meal.MealType,
-                Recipe = MapRecipeToDTO(meal.Recipe)
-            };
-        }
-
-        private RecipeDTO MapRecipeToDTO(Recipe recipe)
-        {
-            return new RecipeDTO
-            {
-                Id = recipe.Id,
-                Name = recipe.Name,
-                Description = recipe.Description
+                RecipeDescription = meal.Recipe?.Description
             };
         }
 
         private Meal MapDTOToMeal(MealDTO mealDTO, Meal existingMeal = null)
         {
             Meal meal = existingMeal ?? new Meal();
-            meal.Id = mealDTO.Id;
             meal.Name = mealDTO.Name;
             meal.Description = mealDTO.Description;
             meal.ImageUrl = mealDTO.ImageUrl;
             meal.ConsumptionDate = mealDTO.ConsumptionDate;
             meal.MealType = mealDTO.MealType;
-            meal.Recipe = MapDTOToRecipe(mealDTO.Recipe, meal.Recipe);
+
+            if (existingMeal == null)
+            {
+                // Create a new Recipe object if it doesn't exist
+                meal.Recipe = new Recipe();
+            }
+            meal.Recipe.Name = mealDTO.Name;
+            meal.Recipe.Description = mealDTO.RecipeDescription;
             return meal;
         }
-
-        private Recipe MapDTOToRecipe(RecipeDTO recipeDTO, Recipe existingRecipe = null)
-        {
-            Recipe recipe = existingRecipe ?? new Recipe();
-            recipe.Id = recipeDTO.Id;
-            recipe.Name = recipeDTO.Name;
-            recipe.Description = recipeDTO.Description;
-            return recipe;
-        }
-
     }
+}
 }
