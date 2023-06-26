@@ -20,96 +20,43 @@ namespace MealPlanner.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllMeals()
+        public IEnumerable<MealDTO> GetAllMeals()
         {
-            try
-            {
-                IList<Meal> meals = mealLogic.ReadAll();
-                IList<MealDTO> mealDTOs = MapMealsToDTOs(meals);
-                return Ok(mealDTOs);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
+            IList<Meal> meals = mealLogic.ReadAll();
+            IList<MealDTO> mealDTOs = MapMealsToDTOs(meals);
+            return mealDTOs;
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetMeal(string id)
+        public MealDTO? GetMeal(string id)
         {
-            try
-            {
-                Meal meal = mealLogic.Read(id);
-                if (meal == null)
-                {
-                    return NotFound();
-                }
-                MealDTO mealDTO = MapMealToDTO(meal);
-                return Ok(mealDTO);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
+            Meal meal = mealLogic.Read(id);
+            MealDTO mealDTO = MapMealToDTO(meal);
+            return mealDTO;
+
         }
 
         [HttpPost]
-        public IActionResult CreateMeal(MealDTO mealDTO)
+        public void CreateMeal([FromBody] MealDTO mealDTO)
         {
-            try
-            {
-                Meal meal = MapDTOToMeal(mealDTO);
-                Meal createdMeal = mealLogic.Create(meal);
-                MealDTO createdMealDTO = MapMealToDTO(createdMeal);
-                return CreatedAtAction(nameof(GetMeal), new { id = createdMealDTO.Id }, createdMealDTO);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            Meal meal = MapDTOToMeal(mealDTO);
+            Meal createdMeal = mealLogic.Create(meal);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateMeal(string id, MealDTO mealDTO)
+        public void UpdateMeal([FromBody] UpdateMealDTO mealDTO)
         {
-            try
-            {
-                if (id != mealDTO.Id)
-                {
-                    return BadRequest("Invalid ID");
-                }
-                Meal existingMeal = mealLogic.Read(id);
-                if (existingMeal == null)
-                {
-                    return NotFound();
-                }
-                Meal updatedMeal = MapDTOToMeal(mealDTO, existingMeal);
-                mealLogic.Update(updatedMeal);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            Meal existingMeal = mealLogic.Read(mealDTO.Id);
+            Meal updatedMeal = MapDTOToMeal(mealDTO, existingMeal);
+            mealLogic.Update(updatedMeal);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteMeal(string id)
+        public void DeleteMeal(string id)
         {
-            try
-            {
-                Meal existingMeal = mealLogic.Read(id);
-                if (existingMeal == null)
-                {
-                    return NotFound();
-                }
                 mealLogic.Delete(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
         }
 
         private IList<MealDTO> MapMealsToDTOs(IList<Meal> meals)
