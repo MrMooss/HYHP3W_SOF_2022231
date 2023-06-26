@@ -23,10 +23,10 @@ builder.Services.AddDefaultIdentity<SiteUser>(options => {
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IMealRepository, MealRepository>();
-builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
-builder.Services.AddScoped<IRecipeLogic, RecipeLogic>();
-builder.Services.AddScoped<IMealLogic, MealLogic>();
+builder.Services.AddTransient<IMealRepository, MealRepository>();
+builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
+builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
+builder.Services.AddTransient<IMealLogic, MealLogic>();
 
 var app = builder.Build();
 
