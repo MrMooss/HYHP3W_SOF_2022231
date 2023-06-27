@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
 
@@ -46,7 +47,21 @@ namespace Kliens
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            MealDTO mealDTO = new MealDTO()
+            {
+                Name = nameTextBox.Text,
+                Description = descriptionTextBox.Text,
+                ConsumptionDate = (DateTime)consumptionDatePicker.SelectedDate,
+                MealType = (MealType)mealTypeComboBox.SelectedValue,
+                ImageUrl = "", //Upload image and return url
+                Recipe = new RecipeDTO()
+                {
+                    Description = recipeTextBox.Text,
+                    Name = nameTextBox.Text
+                }
+            };
 
+            //Call api create
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
