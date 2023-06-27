@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -51,11 +52,8 @@ namespace Kliens
                     ImageUrl = meal.ImageUrl,
                     ConsumptionDate = meal.ConsumptionDate,
                     MealType = meal.MealType,
-                    Recipe = new ViewRecipe
-                    {
-                        Name = meal.Name,
-                        Description = meal.RecipeDescription
-                    }
+                    RecipeDescription = meal.Recipe.Description,
+                    RecipeID = meal.Recipe.Id
                 }).ToList();
 
                 mealListBox.ItemsSource = viewMeals;

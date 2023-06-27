@@ -39,7 +39,7 @@ namespace Kliens
                 descriptionTextBox.Text = selectedMeal.Description;
                 mealTypeComboBox.SelectedItem = selectedMeal.MealType;
                 consumptionDatePicker.SelectedDate = selectedMeal.ConsumptionDate;
-                recipeTextBox.Text = selectedMeal.Recipe.Description;
+                recipeTextBox.Text = selectedMeal.RecipeDescription;
             }
             
         }
