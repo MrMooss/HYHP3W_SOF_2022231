@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kliens.ViewModel
 {
-    class ViewRecipe
+    public class ViewRecipe
     {
         private string name;
         private string description;

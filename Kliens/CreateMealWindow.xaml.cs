@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Common.DTOs;
+using Kliens.ViewModel;
 
 namespace Kliens
 {
@@ -20,15 +21,27 @@ namespace Kliens
     /// </summary>
     public partial class CreateMealWindow : Window
     {
+        ViewMeal selectedMeal;
+
         public CreateMealWindow()
         {
             InitializeComponent();
         }
 
-        public CreateMealWindow(MealDTO selectedMeal)
+        public CreateMealWindow(ViewMeal selectedMeal)
         {
             InitializeComponent();
-            // Use the selectedMeal parameter to populate the window fields or perform any other necessary logic
+            this.selectedMeal = selectedMeal;
+
+            if (this.selectedMeal != null)
+            {
+                nameTextBox.Text = selectedMeal.Name;
+                descriptionTextBox.Text = selectedMeal.Description;
+                mealTypeComboBox.SelectedItem = selectedMeal.MealType;
+                consumptionDatePicker.SelectedDate = selectedMeal.ConsumptionDate;
+                recipeTextBox.Text = selectedMeal.Recipe.Description;
+            }
+            
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

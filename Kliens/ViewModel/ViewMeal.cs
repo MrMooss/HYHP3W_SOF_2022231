@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Kliens.ViewModel
 {
-    class ViewMeal
+    public class ViewMeal
     {
+        private string id;
         private string name;
         private string description;
         private string imageUrl;
@@ -17,6 +18,7 @@ namespace Kliens.ViewModel
         private ViewRecipe recipe;
         private MealType mealType;
 
+        public string Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Description { get => description; set => description = value; }
         public string ImageUrl { get => imageUrl; set => imageUrl = value; }

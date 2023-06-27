@@ -52,7 +52,7 @@ namespace MealPlanner.Controllers
         }
 
         [HttpPut]
-        public void UpdateMeal([FromBody] UpdateMealDTO mealDTO)
+        public void UpdateMeal([FromBody] MealDTO mealDTO)
         {
             Meal existingMeal = mealLogic.Read(mealDTO.Id);
             Meal updatedMeal = MapDTOToMeal(mealDTO, existingMeal);

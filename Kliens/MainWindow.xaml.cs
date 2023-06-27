@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,81 +26,79 @@ namespace Kliens
     {
         private HttpClient httpClient;
         public MealDTO SelectedMeal { get; set; }
+        List<ViewMeal> viewMeals;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            // Initialize the HttpClient
             httpClient = new HttpClient();
-
-            // Load meals on startup
             LoadMeals();
         }
 
         private async Task LoadMeals()
         {
-            // Make an HTTP GET request to the API endpoint for fetching meals
             HttpResponseMessage response = await httpClient.GetAsync("http://localhost:5000/MealApi");
 
             if (response.IsSuccessStatusCode)
             {
-                // Parse the response content to a list of meals
                 List<MealDTO> meals = await response.Content.ReadAsAsync<List<MealDTO>>();
 
-                // Set the ItemsSource of the mealItemsControl to the list of meals
-                mealListBox.ItemsSource = meals;
+                viewMeals = meals.Select(meal => new ViewMeal
+                {
+                    Id = meal.Id,
+                    Name = meal.Name,
+                    Description = meal.Description,
+                    ImageUrl = meal.ImageUrl,
+                    ConsumptionDate = meal.ConsumptionDate,
+                    MealType = meal.MealType,
+                    Recipe = new ViewRecipe
+                    {
+                        Name = meal.Name,
+                        Description = meal.RecipeDescription
+                    }
+                }).ToList();
+
+                mealListBox.ItemsSource = viewMeals;
             }
             else
             {
-                // Handle the error case
                 MessageBox.Show("Failed to load meals.");
             }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (mealListBox.SelectedItem is MealDTO selectedMeal)
+            if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
-                // Open the CreateMealWindow in update mode
                 CreateMealWindow createMealWindow = new CreateMealWindow(selectedMeal);
                 createMealWindow.ShowDialog();
-
-                // Refresh the meals after the CreateMealWindow is closed
                 LoadMeals();
             }
             else
             {
-                // Open the CreateMealWindow in create mode
                 CreateMealWindow createMealWindow = new CreateMealWindow();
                 createMealWindow.ShowDialog();
-
-                // Refresh the meals after the CreateMealWindow is closed
                 LoadMeals();
             }
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (mealListBox.SelectedItem is MealDTO selectedMeal)
+            if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
-                // Make an HTTP DELETE request to the API endpoint for deleting a meal
                 HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:5000/MealApi/{selectedMeal.Id}");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Refresh the meals after successful deletion
                     LoadMeals();
                 }
                 else
                 {
-                    // Handle the error case
                     MessageBox.Show("Failed to delete the meal.");
                 }
             }
             else
             {
-                // Handle the case where no meal is selected
                 MessageBox.Show("Please select a meal to delete.");
             }
         }
