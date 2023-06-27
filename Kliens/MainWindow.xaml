@@ -12,8 +12,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="mealItemsControl" BorderThickness="0">
-                <ItemsControl.ItemTemplate>
+            <ListBox x:Name="mealListBox" BorderThickness="0" SelectedItem="{Binding SelectedMeal}">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,1" BorderBrush="Black">
                             <Grid>
@@ -26,13 +26,13 @@
                             </Grid>
                         </Border>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </ScrollViewer>
         <StackPanel Grid.Column="1" Margin="10">
             <Grid>
