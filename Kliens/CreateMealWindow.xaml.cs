@@ -38,7 +38,7 @@ namespace Kliens
             {
                 nameTextBox.Text = selectedMeal.Name;
                 descriptionTextBox.Text = selectedMeal.Description;
-                mealTypeComboBox.SelectedItem = selectedMeal.MealType;
+                MealTypeComboBox.SelectedItem = selectedMeal.MealType;
                 consumptionDatePicker.SelectedDate = selectedMeal.ConsumptionDate;
                 recipeTextBox.Text = selectedMeal.RecipeDescription;
             }
@@ -52,7 +52,7 @@ namespace Kliens
                 Name = nameTextBox.Text,
                 Description = descriptionTextBox.Text,
                 ConsumptionDate = (DateTime)consumptionDatePicker.SelectedDate,
-                MealType = (MealType)mealTypeComboBox.SelectedValue,
+                MealType = (MealType)MealTypeComboBox.SelectedValue,
                 ImageUrl = "", //Upload image and return url
                 Recipe = new RecipeDTO()
                 {
