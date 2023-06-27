@@ -8,7 +8,7 @@ namespace Common
 {
     public enum MealType
     {
-        Breakfast,
+        Breakfast = 0,
         Lunch,
         Dinner
     }
