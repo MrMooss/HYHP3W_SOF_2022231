@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Common.DTOs;
 
 namespace Kliens
 {
@@ -22,6 +23,12 @@ namespace Kliens
         public CreateMealWindow()
         {
             InitializeComponent();
+        }
+
+        public CreateMealWindow(MealDTO selectedMeal)
+        {
+            InitializeComponent();
+            // Use the selectedMeal parameter to populate the window fields or perform any other necessary logic
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
