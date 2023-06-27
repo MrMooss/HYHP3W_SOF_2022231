@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealPlanner", "MealPlanner\MealPlanner.csproj", "{9D9D03C6-C493-4E4B-8E39-C77EB0465C5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kliens", "Kliens\Kliens.csproj", "{8748C235-4C9B-4B2D-B129-2E550EFF5B48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kliens", "Kliens\Kliens.csproj", "{8748C235-4C9B-4B2D-B129-2E550EFF5B48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F881137B-D6B3-4C2E-B323-74E79932F0B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8748C235-4C9B-4B2D-B129-2E550EFF5B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8748C235-4C9B-4B2D-B129-2E550EFF5B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8748C235-4C9B-4B2D-B129-2E550EFF5B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F881137B-D6B3-4C2E-B323-74E79932F0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F881137B-D6B3-4C2E-B323-74E79932F0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F881137B-D6B3-4C2E-B323-74E79932F0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F881137B-D6B3-4C2E-B323-74E79932F0B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
