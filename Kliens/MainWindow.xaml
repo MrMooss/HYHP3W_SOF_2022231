@@ -12,17 +12,19 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ListBox x:Name="mealListBox" BorderThickness="0" SelectedItem="{Binding SelectedMeal}">
+            <ListBox x:Name="mealListBox" BorderThickness="0" ItemsSource="{Binding ViewMeals}" SelectedItem="{Binding SelectedMeal}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,1" BorderBrush="Black">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0" Source="{Binding ImageUrl}" Width="100" Height="100" Margin="10"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="10"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Description}" VerticalAlignment="Center" Margin="10"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
