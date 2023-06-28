@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
+using Microsoft.Win32;
 
 namespace Kliens
 {
@@ -22,7 +23,9 @@ namespace Kliens
     /// </summary>
     public partial class CreateMealWindow : Window
     {
-        ViewMeal selectedMeal;
+        public ViewMeal? selectedMeal { get; set; }
+
+        private string selectedFilePath;
 
         public event EventHandler<EntityCreatedEventArgs> EntityCreated;
         public CreateMealWindow()
@@ -42,19 +45,22 @@ namespace Kliens
                 MealTypeComboBox.SelectedItem = selectedMeal.MealType;
                 consumptionDatePicker.SelectedDate = selectedMeal.ConsumptionDate;
                 recipeTextBox.Text = selectedMeal.RecipeDescription;
+                pathToImage.Text = selectedMeal.ImageUrl;
             }
-            
+            this.DataContext = this;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+
+            //selectedFilePath képet blob-ba
             MealDTO mealDTO = new MealDTO()
             {
                 Name = nameTextBox.Text,
                 Description = descriptionTextBox.Text,
                 ConsumptionDate = (DateTime)consumptionDatePicker.SelectedDate,
                 MealType = (MealType)MealTypeComboBox.SelectedValue,
-                ImageUrl = "", //Upload image and return url
+                ImageUrl = "", // blob url
                 Recipe = new RecipeDTO()
                 {
                     Description = recipeTextBox.Text,
@@ -68,13 +74,30 @@ namespace Kliens
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (selectedMeal != null)
+            {
+                selectedMeal = null;
+            }
+            Close();
         }
 
 
         private void OnEntityCreated(MealDTO createdEntity)
         {
             EntityCreated?.Invoke(this, new EntityCreatedEventArgs(createdEntity));
+        }
+
+
+        private void SelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif;*.bmp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                selectedFilePath = openFileDialog.FileName;
+                pathToImage.Text = selectedFilePath;
+            }  
         }
     }
 }

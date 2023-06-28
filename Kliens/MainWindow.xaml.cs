@@ -27,7 +27,7 @@ namespace Kliens
     public partial class MainWindow : Window
     {
         private HttpClient client;
-        public MealDTO SelectedMeal { get; set; }
+        public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
 
         public MainWindow()
@@ -72,17 +72,19 @@ namespace Kliens
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+
+            CreateMealWindow createMealWindow = new CreateMealWindow();
+            createMealWindow.EntityCreated += CreateWindow_EntityCreated;
+            createMealWindow.ShowDialog();
+            LoadMeals();
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
             if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
                 CreateMealWindow createMealWindow = new CreateMealWindow(selectedMeal);
-                createMealWindow.EntityCreated += CreateWindow_EntityCreated;
-                createMealWindow.ShowDialog();
-                LoadMeals();
-            }
-            else
-            {
-                CreateMealWindow createMealWindow = new CreateMealWindow();
-                createMealWindow.EntityCreated += CreateWindow_EntityCreated;
+                createMealWindow.EntityCreated += CreateWindow_UpdateEntity;
                 createMealWindow.ShowDialog();
                 LoadMeals();
             }
@@ -109,9 +111,21 @@ namespace Kliens
             }
         }
 
-        private void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)
+        private async void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)
         {
-            ViewMeals.Add(ViewMealFromDTO(e.CreatedEntity));
+            e.CreatedEntity.Id = "";
+            var response = await client.PostAsJsonAsync("/MealApi", e.CreatedEntity);
+            if (response.IsSuccessStatusCode) 
+            {
+                LoadMeals();
+            }
+        }
+
+        private async void CreateWindow_UpdateEntity(object sender, EntityCreatedEventArgs e)
+        {
+            var response = await client.PutAsJsonAsync("/MealApi", e.CreatedEntity);
+            response.EnsureSuccessStatusCode();
+            LoadMeals();
         }
 
         private ViewMeal ViewMealFromDTO(MealDTO meal)
