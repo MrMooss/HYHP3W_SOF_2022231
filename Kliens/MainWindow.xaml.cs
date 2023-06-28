@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
 
@@ -35,7 +36,7 @@ namespace Kliens
             DataContext = this;
 
             client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:5095");
+            client.BaseAddress = new Uri("http://localhost:7289");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
               new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -58,17 +59,7 @@ namespace Kliens
 
                 if (meals.Count > 0)
                 {
-                    var viewMealsList = meals.Select(meal => new ViewMeal
-                    {
-                        Id = meal.Id,
-                        Name = meal.Name,
-                        Description = meal.Description,
-                        ImageUrl = meal.ImageUrl,
-                        ConsumptionDate = meal.ConsumptionDate,
-                        MealType = meal.MealType,
-                        RecipeDescription = meal.Recipe.Description,
-                        RecipeID = meal.Recipe.Id
-                    });
+                    var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
 
                     ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
                 }
@@ -84,12 +75,14 @@ namespace Kliens
             if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
                 CreateMealWindow createMealWindow = new CreateMealWindow(selectedMeal);
+                createMealWindow.EntityCreated += CreateWindow_EntityCreated;
                 createMealWindow.ShowDialog();
                 LoadMeals();
             }
             else
             {
                 CreateMealWindow createMealWindow = new CreateMealWindow();
+                createMealWindow.EntityCreated += CreateWindow_EntityCreated;
                 createMealWindow.ShowDialog();
                 LoadMeals();
             }
@@ -114,6 +107,28 @@ namespace Kliens
             {
                 MessageBox.Show("Please select a meal to delete.");
             }
+        }
+
+        private void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)
+        {
+            ViewMeals.Add(ViewMealFromDTO(e.CreatedEntity));
+        }
+
+        private ViewMeal ViewMealFromDTO(MealDTO meal)
+        {
+            ViewMeal vm = new ViewMeal()
+            {
+                Id = meal.Id,
+                Name = meal.Name,
+                Description = meal.Description,
+                ImageUrl = meal.ImageUrl,
+                ConsumptionDate = meal.ConsumptionDate,
+                MealType = meal.MealType,
+                RecipeDescription = meal.Recipe.Description,
+                RecipeID = meal.Recipe.Id
+            };
+
+            return vm;
         }
     }
 }

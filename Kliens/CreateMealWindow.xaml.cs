@@ -24,6 +24,7 @@ namespace Kliens
     {
         ViewMeal selectedMeal;
 
+        public event EventHandler<EntityCreatedEventArgs> EntityCreated;
         public CreateMealWindow()
         {
             InitializeComponent();
@@ -61,12 +62,19 @@ namespace Kliens
                 }
             };
 
-            //Call api create
+            OnEntityCreated(mealDTO);
+            Close();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+
+        private void OnEntityCreated(MealDTO createdEntity)
+        {
+            EntityCreated?.Invoke(this, new EntityCreatedEventArgs(createdEntity));
         }
     }
 }
