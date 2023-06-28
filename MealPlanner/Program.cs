@@ -21,7 +21,8 @@ builder.Services.AddDefaultIdentity<SiteUser>(options => {
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+  .AddRoles<IdentityRole>()
+  .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IMealRepository, MealRepository>();
 builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
