@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -24,12 +25,12 @@ namespace Kliens
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window , INotifyPropertyChanged
     {
         private HttpClient client;
         public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
-
+        public event PropertyChangedEventHandler? PropertyChanged;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,6 +63,7 @@ namespace Kliens
                     var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
 
                     ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
                 }
             }
             else
@@ -141,7 +143,7 @@ namespace Kliens
                 RecipeDescription = meal.Recipe.Description,
                 RecipeID = meal.Recipe.Id
             };
-
+            
             return vm;
         }
     }
