@@ -143,6 +143,7 @@ namespace Kliens
         async Task<UserInfo> GetUserInfo()
         {
             var response = await client.GetAsync("auth");
+            Debug.Write(response);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsAsync<UserInfo>();

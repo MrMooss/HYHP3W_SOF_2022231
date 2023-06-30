@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -57,12 +58,14 @@ namespace MealPlanner.Controllers
         {
             var user = new SiteUser
             {
+                UserName = model.UserName,
                 Email = model.UserEmail,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ProfilePictureUrl = "", // blob url
                 EmailConfirmed = true
             };
-            await _userManager.CreateAsync(user, model.Password);
+            var response = await _userManager.CreateAsync(user, model.Password);
+            Debug.WriteLine(response.Succeeded);
             await _userManager.AddToRoleAsync(user, "NormalUser");
             return Ok();
         }
@@ -76,7 +79,7 @@ namespace MealPlanner.Controllers
             {
                 return Ok(new
                 {
-                    UserName = user.Email,
+                    UserName = user.UserName,
                     Email = user.Email,
                     PhotoUrl = user.ProfilePictureUrl,
                     Roles = await _userManager.GetRolesAsync(user)

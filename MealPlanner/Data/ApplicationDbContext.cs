@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MealPlanner.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<SiteUser>
     {
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
