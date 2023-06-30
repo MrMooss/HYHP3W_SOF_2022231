@@ -48,6 +48,7 @@ namespace Kliens
             model.Password = password.Password;
             model.UserEmail = email.Text;
             model.PhotoUrl = pathToImage.Text;
+            model.UserName = email.Text;
             var response = await client.PutAsJsonAsync<RegisterViewModel>("auth", model);
 
             if (response.IsSuccessStatusCode)
