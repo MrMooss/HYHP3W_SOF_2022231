@@ -1,5 +1,4 @@
-﻿using AspNetCore;
-using MealPlanner.Models;
+﻿using MealPlanner.Models;
 using MealPlanner.Models.AuthModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

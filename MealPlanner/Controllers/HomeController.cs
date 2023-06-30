@@ -1,6 +1,7 @@
 ﻿using Common.DTOs;
 using MealPlanner.Interfaces;
 using MealPlanner.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -29,11 +30,13 @@ namespace MealPlanner.Controllers
             return View(_mealLogic.ReadAll());
         }
 
+        [Authorize(Roles = "NormalUser")]
         public IActionResult Add()
         {
             return View();
         }
 
+        [Authorize(Roles = "NormalUser")]
         [HttpPost]
         public  IActionResult Add(AddMealDTO mealDTO)
         {
@@ -43,6 +46,8 @@ namespace MealPlanner.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "NormalUser")]
         public IActionResult Update(string ID)
         {
             Meal meal = _mealLogic.Read(ID);
@@ -51,6 +56,7 @@ namespace MealPlanner.Controllers
             return View(mealDTO);
         }
 
+        [Authorize(Roles = "NormalUser")]
         [HttpPost]
         public IActionResult Update(UpdateMealDTO mealDTO)
         {
@@ -61,6 +67,7 @@ namespace MealPlanner.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "NormalUser")]
         [HttpGet]
         public IActionResult Delete(string ID)
         {
