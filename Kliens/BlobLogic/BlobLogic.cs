@@ -3,6 +3,7 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MealPlanner.Logic
@@ -30,6 +31,16 @@ namespace MealPlanner.Logic
             }
             blobClient.SetAccessTier(AccessTier.Cool);
             return blobClient.Uri.AbsoluteUri;
+        }
+
+        public async Task<bool> Delete(string url)
+        {
+            string blobName = new Uri(url).Segments.Last();
+
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            var deleted = await blobClient.DeleteAsync();
+
+            return !deleted.IsError;
         }
     }
 }

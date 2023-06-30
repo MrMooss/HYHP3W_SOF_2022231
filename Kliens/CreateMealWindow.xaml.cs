@@ -62,7 +62,7 @@ namespace Kliens
             {
                 Idm = selectedMeal.Id;
                 Idr = selectedMeal.RecipeID;
-                if (!selectedMeal.ImageUrl.Contains("http"))
+                if (!Uri.IsWellFormedUriString(pathToImage.Text, UriKind.Absolute))
                 {
                     imageurl = await bl.Upload(pathToImage.Text);
                 }
