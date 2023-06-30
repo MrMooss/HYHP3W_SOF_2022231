@@ -3,8 +3,11 @@ using MealPlanner.Interfaces;
 using MealPlanner.Logic;
 using MealPlanner.Models;
 using MealPlanner.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +31,30 @@ builder.Services.AddTransient<IMealRepository, MealRepository>();
 builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
 builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
 builder.Services.AddTransient<IMealLogic, MealLogic>();
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = "http://www.security.org",
+        ValidIssuer = "http://www.security.org",
+        IssuerSigningKey = new SymmetricSecurityKey
+      (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"))
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
