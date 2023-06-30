@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
+using MealPlanner.Logic;
 using Microsoft.Win32;
 
 namespace Kliens
@@ -26,6 +27,8 @@ namespace Kliens
         public ViewMeal? selectedMeal { get; set; }
 
         private string selectedFilePath;
+
+        BlobLogic bl = new BlobLogic();
 
         public event EventHandler<EntityCreatedEventArgs> EntityCreated;
         public CreateMealWindow()
@@ -50,16 +53,24 @@ namespace Kliens
             this.DataContext = this;
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string Idm = "";
             string Idr = "";
-            //selectedFilePath képet blob-ba
+            string imageurl = "";
             if(selectedMeal != null)
             {
                 Idm = selectedMeal.Id;
                 Idr = selectedMeal.RecipeID;
+                if (!selectedMeal.ImageUrl.Contains("http"))
+                {
+                    imageurl = await bl.Upload(pathToImage.Text);
+                }
+                else
+                    imageurl = selectedMeal.ImageUrl;
             }
+            if(selectedMeal == null)
+                imageurl = await bl.Upload(pathToImage.Text);
             MealDTO mealDTO = new MealDTO()
             {
                 Id = Idm,
@@ -67,7 +78,7 @@ namespace Kliens
                 Description = descriptionTextBox.Text,
                 ConsumptionDate = (DateTime)consumptionDatePicker.SelectedDate,
                 MealType = (MealType)MealTypeComboBox.SelectedValue,
-                ImageUrl = "", // blob url
+                ImageUrl = imageurl,
                 Recipe = new RecipeDTO()
                 {
                     Id = Idr,

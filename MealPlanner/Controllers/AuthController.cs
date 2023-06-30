@@ -63,7 +63,7 @@ namespace MealPlanner.Controllers
                 UserName = model.UserName,
                 Email = model.UserEmail,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                ProfilePictureUrl = "", // blob url
+                ProfilePictureUrl = model.PhotoUrl,
                 EmailConfirmed = true
             };
             var response = await _userManager.CreateAsync(user, model.Password);
@@ -110,7 +110,7 @@ namespace MealPlanner.Controllers
             var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
             user.Email = model.UserEmail;
             user.UserName = model.UserName;
-            user.ProfilePictureUrl = ""; // blob url
+            user.ProfilePictureUrl = model.PhotoUrl;
             if (!(model.Password == null || model.Password.Length == 0))
             {
                 await _userManager.RemovePasswordAsync(user);

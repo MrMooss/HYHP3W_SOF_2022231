@@ -1,4 +1,5 @@
 ﻿using Kliens.ViewModel;
+using MealPlanner.Logic;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Kliens
     public partial class RegisterWindow : Window
     {
         RegisterViewModel model = new RegisterViewModel();
-
+        BlobLogic bl = new BlobLogic();
         public RegisterWindow()
         {
             InitializeComponent();
@@ -44,10 +45,10 @@ namespace Kliens
             client.DefaultRequestHeaders.Accept.Add(
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
             );
-
+            string imageurl = await bl.Upload(pathToImage.Text);
             model.Password = password.Password;
             model.UserEmail = email.Text;
-            model.PhotoUrl = pathToImage.Text;
+            model.PhotoUrl = imageurl;
             model.UserName = email.Text;
             var response = await client.PutAsJsonAsync<RegisterViewModel>("auth", model);
 
