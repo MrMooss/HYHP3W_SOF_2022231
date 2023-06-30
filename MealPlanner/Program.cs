@@ -26,11 +26,7 @@ builder.Services.AddDefaultIdentity<SiteUser>(options => {
 })
   .AddRoles<IdentityRole>()
   .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
-builder.Services.AddTransient<IMealRepository, MealRepository>();
-builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
-builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
-builder.Services.AddTransient<IMealLogic, MealLogic>();
+
 
 builder.Services.AddAuthentication(option =>
 {
@@ -51,6 +47,12 @@ builder.Services.AddAuthentication(option =>
       (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"))
     };
 });
+
+builder.Services.AddTransient<IMealRepository, MealRepository>();
+builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
+builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
+builder.Services.AddTransient<IMealLogic, MealLogic>();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorization();
 
