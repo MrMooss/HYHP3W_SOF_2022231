@@ -30,13 +30,13 @@ namespace MealPlanner.Controllers
             return View(_mealLogic.ReadAll());
         }
 
-        [Authorize(Roles = "NormalUser")]
+        [Authorize]
         public IActionResult Add()
         {
             return View();
         }
 
-        [Authorize(Roles = "NormalUser")]
+        [Authorize]
         [HttpPost]
         public  IActionResult Add(AddMealDTO mealDTO)
         {
