@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Common.DTOs
 {
-    public class UpdateMealDTO : MealDTO
+    public class RecipeDTO
     {
-        public string Id { get; set; } 
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

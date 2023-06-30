@@ -42,7 +42,7 @@ namespace MealPlanner.Controllers
             Recipe recipe = new Recipe
             {
                 Name = mealDTO.Name,
-                Description = mealDTO.RecipeDescription,
+                Description = mealDTO.Recipe.Description,
                 Meal = meal
             };
             meal.Recipe = recipe;
@@ -52,7 +52,7 @@ namespace MealPlanner.Controllers
         }
 
         [HttpPut]
-        public void UpdateMeal([FromBody] UpdateMealDTO mealDTO)
+        public void UpdateMeal([FromBody] MealDTO mealDTO)
         {
             Meal existingMeal = mealLogic.Read(mealDTO.Id);
             Meal updatedMeal = MapDTOToMeal(mealDTO, existingMeal);
@@ -88,7 +88,12 @@ namespace MealPlanner.Controllers
                 ImageUrl = meal.ImageUrl,
                 ConsumptionDate = meal.ConsumptionDate,
                 MealType = meal.MealType,
-                RecipeDescription = meal.Recipe?.Description
+                Recipe = new RecipeDTO()
+                {
+                    Description = meal.Recipe.Description,
+                    Name = meal.Recipe.Name,
+                    Id = meal.Recipe.Id
+                }
             };
         }
 
@@ -107,7 +112,7 @@ namespace MealPlanner.Controllers
         {
             Recipe recipe = existingRecipe ?? new Recipe();
             recipe.Name = mealDTO.Name;
-            recipe.Description = mealDTO.RecipeDescription;
+            recipe.Description = mealDTO.Recipe.Description;
             recipe.Meal = existingMeal;
             return recipe;
         }

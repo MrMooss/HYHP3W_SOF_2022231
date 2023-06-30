@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kliens"
+        xmlns:common="clr-namespace:Common;assembly=Common"
         mc:Ignorable="d"
-        Title="Create" Height="600" Width="500">
-    <Grid Margin="20">
+        Title="Create" Height="613" Width="500">
+    <Grid Margin="20,20,20,17">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -15,7 +16,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" MaxHeight="200"/>
             <RowDefinition Height="Auto" MaxHeight="200"/>
-            <RowDefinition Height="*" MaxHeight="200"/>
+            <RowDefinition MaxHeight="200" Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -25,12 +27,23 @@
         <TextBlock Grid.Row="2" Text="Description:" Margin="0,10,0,0"/>
         <TextBox Grid.Row="3" x:Name="descriptionTextBox" Width="300" Height="80" AcceptsReturn="True"/>
         <TextBlock Grid.Row="4" Text="Meal Type:" Margin="0,10,0,0"/>
-        <ComboBox Grid.Row="5" x:Name="mealTypeComboBox" Width="300"/>
-        <TextBlock Grid.Row="6" Text="Consumption Date:" Margin="0,10,0,0" MaxHeight="150"/>
-        <DatePicker Grid.Row="7" x:Name="consumptionDatePicker" Width="200" Height="150"/>
-        <TextBlock Grid.Row="8" Text="Recipe:" Margin="0,10,0,0"/>
-        <TextBox Grid.Row="9" x:Name="recipeTextBox" Width="300" Height="150" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Button Grid.Row="10" Content="Back" Width="80" Margin="130,0,250,0" VerticalAlignment="Center" Click="BackButton_Click"/>
-        <Button Grid.Row="10" Content="Save" Width="80" VerticalAlignment="Center" Click="SaveButton_Click" Margin="250,0,130,0"/>
+        <ComboBox x:Name="MealTypeComboBox" Grid.Row="4" Width="300">
+            <ComboBox.ItemsSource>
+                <x:Array Type="{x:Type common:MealType}">
+                    <common:MealType>Breakfast</common:MealType>
+                    <common:MealType>Lunch</common:MealType>
+                    <common:MealType>Dinner</common:MealType>
+                </x:Array>
+            </ComboBox.ItemsSource>
+        </ComboBox>
+        <TextBlock Grid.Row="6" Text="Picture:" Margin="20,5,0,0" />
+        <Button Grid.Row="7" Content="Select" HorizontalAlignment="Left" Margin="30,5,0,0" Width="75" Height="23" VerticalAlignment="Top" Grid.RowSpan="2" Click="SelectButton_Click"/>
+        <TextBlock Grid.Row="7" x:Name="pathToImage" Margin="110,0,10,0" Height="28" VerticalAlignment="Center" Text=""/>
+        <TextBlock Grid.Row="8" Text="Consumption Date:" Margin="0,10,0,0" MaxHeight="150"/>
+        <DatePicker Grid.Row="9" x:Name="consumptionDatePicker" Width="200" Height="31" Margin="130,0,130,0" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="10" Text="Recipe:" Margin="0,10,0,0"/>
+        <TextBox Grid.Row="11" x:Name="recipeTextBox" Width="300" Height="150" AcceptsReturn="True" TextWrapping="Wrap" Margin="80,10,80,111"/>
+        <Button Grid.Row="11" Content="Back" Width="80" Margin="130,196,250,0" VerticalAlignment="Top" Click="BackButton_Click"/>
+        <Button Grid.Row="11" Content="Save" Width="80" VerticalAlignment="Top" Click="SaveButton_Click" Margin="240,196,140,0"/>
     </Grid>
 </Window>

@@ -12,27 +12,29 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="mealItemsControl" BorderThickness="0">
-                <ItemsControl.ItemTemplate>
+            <ListBox x:Name="mealListBox" BorderThickness="0" ItemsSource="{Binding ViewMeals}" SelectedItem="{Binding SelectedMeal}">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0,0,0,1" BorderBrush="Black">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0" Source="{Binding ImageUrl}" Width="100" Height="100" Margin="10"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="10"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Description}" VerticalAlignment="Center" Margin="10"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel/>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </ScrollViewer>
         <StackPanel Grid.Column="1" Margin="10">
             <Grid>
@@ -43,7 +45,8 @@
                 <Image Grid.Column="0" Source="profile_picture.png" Width="50" Height="50" Margin="0,0,10,0"/>
                 <TextBlock Grid.Column="1" Text="Username" VerticalAlignment="Center"/>
             </Grid>
-            <Button Content="Add" Width="100" Margin="0,10,0,10" Click="AddButton_Click"/>
+            <Button Content="Add" Width="100" Margin="0,10,0,0" Click="AddButton_Click"/>
+            <Button Content="Update" Width="100" Margin="0,10,0,10" Click="UpdateButton_Click"/>
             <Button Content="Delete" Width="100" Click="DeleteButton_Click"/>
         </StackPanel>
     </Grid>
