@@ -35,6 +35,7 @@ builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
 builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
 builder.Services.AddTransient<IMealLogic, MealLogic>();
 
+
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
