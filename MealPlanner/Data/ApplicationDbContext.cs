@@ -29,12 +29,18 @@ namespace MealPlanner.Data
                 Id = ID,
                 Email = "test@test.com",
                 EmailConfirmed = true,
-                UserName = "testuser",
-                NormalizedUserName = "TESTUSER",
-                ProfilePictureUrl = $"{ID}_testuser"
+                UserName = "test@test.com",
+                NormalizedUserName = "TEST@TEST.COM",
+                ProfilePictureUrl = $"{ID}_test@test.com"
             };
             testUser.PasswordHash = ph.HashPassword(testUser, "password");
             builder.Entity<SiteUser>().HasData(testUser);
+
+            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = "1",
+                UserId = testUser.Id
+            });
 
             string mealId = Guid.NewGuid().ToString();
             Meal meal1 = new Meal
