@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Kliens.ViewModel;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,10 +22,52 @@ namespace Kliens
     /// </summary>
     public partial class RegisterWindow : Window
     {
+        RegisterViewModel model = new RegisterViewModel();
+
         public RegisterWindow()
         {
             InitializeComponent();
-            // a
+        }
+
+        private void LoginButtonClick(object sender, RoutedEventArgs e)
+        {
+            LoginWindow windw = new LoginWindow();
+            Close();
+            windw.Show();
+            
+        }
+
+        private async void RegisterButtonClick(object sender, RoutedEventArgs e)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("https://localhost:7289");
+            client.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
+            );
+
+            model.UserName = username.Text;
+            model.Password = password.Password;
+            model.UserEmail = email.Text;
+            model.PhotoUrl = pathToImage.Text;
+            var response = await client.PutAsJsonAsync<RegisterViewModel>("auth", model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = MessageBox.Show("Registration succesful", "Info", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                this.DialogResult = true;
+            }
+        }
+
+        private void SelectImageClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "png files (*.png)|*.png|jpeg files (*.jpeg)|*.jpeg";
+            if (ofd.ShowDialog() == true)
+            {
+                string filename = ofd.FileName;
+                pathToImage.Text = filename;
+            }
         }
     }
 }

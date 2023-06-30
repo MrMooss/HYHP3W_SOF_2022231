@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +20,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
+using static Kliens.LoginWindow;
 
 namespace Kliens
 {
@@ -31,23 +33,41 @@ namespace Kliens
         public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
-        public MainWindow()
+
+        TokenModel token;
+        UserInfo userinfo;
+
+        public MainWindow(TokenModel tokenModel)
         {
             InitializeComponent();
             DataContext = this;
+
+            token = tokenModel;
 
             client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:7289");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
               new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Token);
 
             ViewMeals = new ObservableCollection<ViewMeal>()
             {
-                new ViewMeal() { Name="Teszt", ImageUrl="https://www.adventisthealth.org/cms/thumbnails/00/1100x506/images/blog/sad.jpg", Description="Szia kedves Erősssssssssssssssssssssssssssssss"}
-            };
+                new ViewMeal() { Name="Welcome", ImageUrl="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif", Description="Database loading, please wait"}
+            };    
 
-            LoadMeals();
+            Task.Run(async () =>
+            {
+                LoadMeals();
+                userinfo = await GetUserInfo();
+            }).Wait();
+
+            usernamebox.Text = userinfo.UserName;
+            var converter = new ImageSourceConverter();
+            ImageSource imageSource = (ImageSource)converter.ConvertFromString(userinfo.PhotoUrl);
+            profpics.Source = imageSource;
+            
         }
 
         private async Task LoadMeals()
@@ -109,6 +129,16 @@ namespace Kliens
             {
                 MessageBox.Show("Please select a meal to delete.");
             }
+        }
+
+        async Task<UserInfo> GetUserInfo()
+        {
+            var response = await client.GetAsync("auth");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsAsync<UserInfo>();
+            }
+            throw new Exception("something wrong...");
         }
 
         private async void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)

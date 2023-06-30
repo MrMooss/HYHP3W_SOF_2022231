@@ -1,5 +1,4 @@
-﻿using AspNetCore;
-using MealPlanner.Models;
+﻿using MealPlanner.Models;
 using MealPlanner.Models.AuthModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +23,7 @@ namespace MealPlanner.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.UserEmail);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -55,7 +54,7 @@ namespace MealPlanner.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> InsertUser([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> InsertUser([FromBody] RegisterModel model)
         {
             var user = new SiteUser
             {
@@ -102,7 +101,7 @@ namespace MealPlanner.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Update([FromBody] RegisterModel model)
         {
             var user = _userManager.Users.FirstOrDefault(t => t.UserName == this.User.Identity.Name);
             user.Email = model.UserEmail;
