@@ -48,7 +48,7 @@ namespace MealPlanner.Controllers
             meal.Recipe = recipe;
 
             mealLogic.Create(meal);
-            recipeLogic.Create(recipe);
+            //recipeLogic.Create(recipe);
         }
 
         [HttpPut]
@@ -83,6 +83,7 @@ namespace MealPlanner.Controllers
         {
             return new MealDTO
             {
+                Id = meal.Id,
                 Name = meal.Name,
                 Description = meal.Description,
                 ImageUrl = meal.ImageUrl,

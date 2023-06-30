@@ -78,7 +78,6 @@ namespace Kliens
             CreateMealWindow createMealWindow = new CreateMealWindow();
             createMealWindow.EntityCreated += CreateWindow_EntityCreated;
             createMealWindow.ShowDialog();
-            LoadMeals();
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -88,7 +87,6 @@ namespace Kliens
                 CreateMealWindow createMealWindow = new CreateMealWindow(selectedMeal);
                 createMealWindow.EntityCreated += CreateWindow_UpdateEntity;
                 createMealWindow.ShowDialog();
-                LoadMeals();
             }
         }
 
