@@ -31,8 +31,7 @@ namespace MealPlanner.Controllers
                 var claim = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 };
                 foreach (var role in await _userManager.GetRolesAsync(user))
                 {
@@ -41,7 +40,7 @@ namespace MealPlanner.Controllers
                 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"));
                 var token = new JwtSecurityToken(
                  issuer: "http://www.security.org", audience: "http://www.security.org",
-                 claims: claim, expires: DateTime.Now.AddMinutes(60),
+                 claims: claim, expires: DateTime.Now.AddYears(1),
                  signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
                 return Ok(new
@@ -61,6 +60,7 @@ namespace MealPlanner.Controllers
                 Email = model.UserEmail,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ProfilePictureUrl = "", // blob url
+                EmailConfirmed = true
             };
             await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "NormalUser");
@@ -71,7 +71,7 @@ namespace MealPlanner.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserInfos()
         {
-            var user = _userManager.Users.FirstOrDefault(t => t.UserName == this.User.Identity.Name);
+            var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
             if (user != null)
             {
                 return Ok(new
@@ -89,7 +89,7 @@ namespace MealPlanner.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMyself()
         {
-            var user = _userManager.Users.FirstOrDefault(t => t.UserName == this.User.Identity.Name);
+            var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
@@ -102,7 +102,7 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] RegisterModel model)
         {
-            var user = _userManager.Users.FirstOrDefault(t => t.UserName == this.User.Identity.Name);
+            var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
             user.Email = model.UserEmail;
             user.UserName = model.UserName;
             user.ProfilePictureUrl = ""; // blob url

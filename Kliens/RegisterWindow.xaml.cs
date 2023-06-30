@@ -68,5 +68,11 @@ namespace Kliens
                 pathToImage.Text = filename;
             }
         }
+
+        private void OnCloseEvent(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+        }
     }
 }
