@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
+using MealPlanner.Logic;
 using static Kliens.LoginWindow;
 
 namespace Kliens
@@ -29,6 +30,7 @@ namespace Kliens
     /// </summary>
     public partial class MainWindow : Window , INotifyPropertyChanged
     {
+        BlobLogic bl = new BlobLogic();
         private HttpClient client;
         public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
@@ -123,6 +125,7 @@ namespace Kliens
         {
             if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
+                var aha = await bl.Delete(selectedMeal.ImageUrl);
                 HttpResponseMessage response = await client.DeleteAsync($"/MealApi/{selectedMeal.Id}");
 
                 if (response.IsSuccessStatusCode)
