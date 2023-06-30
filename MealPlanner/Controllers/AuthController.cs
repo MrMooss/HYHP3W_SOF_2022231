@@ -32,6 +32,8 @@ namespace MealPlanner.Controllers
                 var claim = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 };
                 foreach (var role in await _userManager.GetRolesAsync(user))
