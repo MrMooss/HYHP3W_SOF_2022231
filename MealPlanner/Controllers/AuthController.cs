@@ -59,7 +59,6 @@ namespace MealPlanner.Controllers
             var user = new SiteUser
             {
                 Email = model.UserEmail,
-                UserName = model.UserName,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ProfilePictureUrl = "", // blob url
             };
@@ -77,7 +76,7 @@ namespace MealPlanner.Controllers
             {
                 return Ok(new
                 {
-                    UserName = user.UserName,
+                    UserName = user.Email,
                     Email = user.Email,
                     PhotoUrl = user.ProfilePictureUrl,
                     Roles = await _userManager.GetRolesAsync(user)

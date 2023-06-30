@@ -64,10 +64,19 @@ namespace Kliens
             }).Wait();
 
             usernamebox.Text = userinfo.UserName;
-            var converter = new ImageSourceConverter();
-            ImageSource imageSource = (ImageSource)converter.ConvertFromString(userinfo.PhotoUrl);
-            profpics.Source = imageSource;
+            profpics.Source = GetImage(userinfo.PhotoUrl);
             
+        }
+
+        public ImageSource GetImage(string url)
+        {
+            BitmapImage image = new BitmapImage();
+
+            image.BeginInit();
+            image.UriSource = new Uri(url);
+            image.EndInit();
+
+            return image;
         }
 
         private async Task LoadMeals()

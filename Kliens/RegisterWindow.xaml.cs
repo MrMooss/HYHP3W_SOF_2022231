@@ -45,7 +45,6 @@ namespace Kliens
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
             );
 
-            model.UserName = username.Text;
             model.Password = password.Password;
             model.UserEmail = email.Text;
             model.PhotoUrl = pathToImage.Text;

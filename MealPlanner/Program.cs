@@ -17,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString).UseLazyLoadingProxies());
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<SiteUser>(options => {
+builder.Services.AddDefaultIdentity<SiteUser>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 8;
@@ -25,7 +26,9 @@ builder.Services.AddDefaultIdentity<SiteUser>(options => {
     options.Password.RequireUppercase = false;
 })
   .AddRoles<IdentityRole>()
-  .AddEntityFrameworkStores<ApplicationDbContext>();
+  .AddEntityFrameworkStores<ApplicationDbContext>()
+  .AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IMealRepository, MealRepository>();
 builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
