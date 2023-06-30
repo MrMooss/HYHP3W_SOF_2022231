@@ -14,8 +14,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Username" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-        <TextBox Grid.Row="1" x:Name="usernameTextBox" HorizontalAlignment="Center" Width="200" Margin="0,0,0,5"/>
+        <TextBlock Grid.Row="0" Text="Email" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+        <TextBox Grid.Row="1" x:Name="emailTextBox" HorizontalAlignment="Center" Width="200" Margin="0,0,0,5"/>
         <TextBlock Grid.Row="2" Text="Password" HorizontalAlignment="Center" Margin="0,10,0,5"/>
         <PasswordBox Grid.Row="3" x:Name="passwordBox" HorizontalAlignment="Center" Width="200" Margin="0,0,0,5"/>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
