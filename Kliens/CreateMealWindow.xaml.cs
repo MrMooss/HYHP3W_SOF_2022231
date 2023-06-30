@@ -52,10 +52,17 @@ namespace Kliens
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-
+            string Idm = "";
+            string Idr = "";
             //selectedFilePath képet blob-ba
+            if(selectedMeal != null)
+            {
+                Idm = selectedMeal.Id;
+                Idr = selectedMeal.RecipeID;
+            }
             MealDTO mealDTO = new MealDTO()
             {
+                Id = Idm,
                 Name = nameTextBox.Text,
                 Description = descriptionTextBox.Text,
                 ConsumptionDate = (DateTime)consumptionDatePicker.SelectedDate,
@@ -63,6 +70,7 @@ namespace Kliens
                 ImageUrl = "", // blob url
                 Recipe = new RecipeDTO()
                 {
+                    Id = Idr,
                     Description = recipeTextBox.Text,
                     Name = nameTextBox.Text
                 }
