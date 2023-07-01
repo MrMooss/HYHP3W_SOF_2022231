@@ -30,13 +30,13 @@ namespace MealPlanner.Controllers
             return View(_mealLogic.ReadAll());
         }
 
-        [Authorize]
+        [Authorize(Roles = "NormalUser,Admin")]
         public IActionResult Add()
         {
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "NormalUser,Admin")]
         [HttpPost]
         public  IActionResult Add(AddMealDTO mealDTO)
         {
@@ -47,7 +47,7 @@ namespace MealPlanner.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "NormalUser")]
+        [Authorize(Roles = "NormalUser,Admin")]
         public IActionResult Update(string ID)
         {
             Meal meal = _mealLogic.Read(ID);
@@ -56,7 +56,7 @@ namespace MealPlanner.Controllers
             return View(mealDTO);
         }
 
-        [Authorize(Roles = "NormalUser")]
+        [Authorize(Roles = "NormalUser,Admin")]
         [HttpPost]
         public IActionResult Update(UpdateMealDTO mealDTO)
         {
@@ -67,7 +67,7 @@ namespace MealPlanner.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "NormalUser")]
+        [Authorize(Roles = "NormalUser,Admin")]
         [HttpGet]
         public IActionResult Delete(string ID)
         {
