@@ -4,6 +4,7 @@ using MealPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealPlanner.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230630143702_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,10 +54,10 @@ namespace MealPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e8226bd-007e-402f-b9e6-1119a32efdde",
+                            Id = "8b7d0902-0c26-4bb1-a309-5734de3419b2",
                             ConsumptionDate = new DateTime(2023, 6, 1, 7, 22, 16, 0, DateTimeKind.Unspecified),
                             Description = "Nagyon teszt",
-                            ImageUrl = "1e8226bd-007e-402f-b9e6-1119a32efdde_Test Meal",
+                            ImageUrl = "8b7d0902-0c26-4bb1-a309-5734de3419b2_Test Meal",
                             MealType = 0,
                             Name = "Test Meal"
                         });
@@ -88,10 +90,9 @@ namespace MealPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b31d6f0c-aca1-487f-aeca-8a03e0370d6c",
+                            Id = "6b9219a7-aa8a-44c5-84fb-744f2571b782",
                             Description = "Teszt recept leírása",
-                            MealId = "1e8226bd-007e-402f-b9e6-1119a32efdde",
-
+                            MealId = "8b7d0902-0c26-4bb1-a309-5734de3419b2",
                             Name = "Test Recipe"
                         });
                 });
@@ -311,13 +312,6 @@ namespace MealPlanner.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "18f96742-7c34-42ab-9fee-8548c6244e38",
-                            RoleId = "1"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -339,35 +333,6 @@ namespace MealPlanner.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("MealPlanner.Models.SiteUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("SiteUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "18f96742-7c34-42ab-9fee-8548c6244e38",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "f1edefba-aab2-4634-a41a-d19cff514a9b",
-                            Email = "test@test.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "TEST@TEST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKzi1/Pxo8JBbtE2N6dC7zXAOEdLxebCIs0HVhuDDmZ5wNgsZGJqRmdnEZ+PcL2s5Q==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "73e4a173-68aa-4725-92ed-877f9953f520",
-                            TwoFactorEnabled = false,
-                            UserName = "test@test.com",
-                            ProfilePictureUrl = "18f96742-7c34-42ab-9fee-8548c6244e38_test@test.com"
-                        });
                 });
 
             modelBuilder.Entity("MealPlanner.Models.Recipe", b =>

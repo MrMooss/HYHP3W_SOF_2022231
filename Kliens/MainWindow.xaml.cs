@@ -73,7 +73,7 @@ namespace Kliens
             BitmapImage image = new BitmapImage();
 
             image.BeginInit();
-            image.UriSource = new Uri(url);
+            image.UriSource = new Uri("https://scontent.fbud3-1.fna.fbcdn.net/v/t1.6435-1/108772018_3029946947118227_4779291907231442587_n.jpg?stp=dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=7206a8&_nc_ohc=pvI3Kv3TARcAX8WRbOX&_nc_ht=scontent.fbud3-1.fna&oh=00_AfD-z-HHRdfQJ_Vm_Uo4aszp4rRl6lWL3MP1egpfe-W6kA&oe=64C6661D");
             image.EndInit();
 
             return image;
@@ -143,6 +143,7 @@ namespace Kliens
         async Task<UserInfo> GetUserInfo()
         {
             var response = await client.GetAsync("auth");
+            Debug.Write(response);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsAsync<UserInfo>();
