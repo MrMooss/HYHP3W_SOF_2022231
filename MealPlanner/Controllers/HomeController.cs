@@ -78,8 +78,9 @@ namespace MealPlanner.Controllers
 
         [Authorize(Roles = "NormalUser,Admin")]
         [HttpGet]
-        public IActionResult Delete(string ID)
+        public async Task<IActionResult> Delete(string ID)
         {
+            await bl.Delete(_mealLogic.Read(ID).ImageUrl);
             _mealLogic.Delete(ID);
 
             return RedirectToAction(nameof(Index));
