@@ -35,12 +35,10 @@ builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
 builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
 builder.Services.AddTransient<IMealLogic, MealLogic>();
 
-builder.Services.AddAuthentication(option =>
-{
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+
+builder.Services.AddAuthentication()
+.AddCookie()
+.AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = true;
