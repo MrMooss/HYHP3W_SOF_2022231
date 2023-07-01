@@ -1,5 +1,6 @@
 ﻿using MealPlanner.Models;
 using MealPlanner.Models.AuthModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -72,7 +73,7 @@ namespace MealPlanner.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetUserInfos()
         {
@@ -90,7 +91,7 @@ namespace MealPlanner.Controllers
             return Unauthorized();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete]
         public async Task<IActionResult> DeleteMyself()
         {
