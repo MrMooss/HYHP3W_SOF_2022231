@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
-using MealPlanner.Logic;
+using Common.BlobLogic;
 using Microsoft.Win32;
 
 namespace Kliens

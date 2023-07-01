@@ -20,7 +20,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
-using MealPlanner.Logic;
+using Common.BlobLogic;
 using static Kliens.LoginWindow;
 
 namespace Kliens

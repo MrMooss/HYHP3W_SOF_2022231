@@ -1,5 +1,5 @@
 ﻿using Kliens.ViewModel;
-using MealPlanner.Logic;
+using Common.BlobLogic;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;

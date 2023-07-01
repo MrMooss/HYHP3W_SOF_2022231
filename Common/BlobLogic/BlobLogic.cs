@@ -1,12 +1,11 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MealPlanner.Logic
+namespace Common.BlobLogic
 {
     public class BlobLogic
     {
