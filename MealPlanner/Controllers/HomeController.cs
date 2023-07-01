@@ -61,8 +61,14 @@ namespace MealPlanner.Controllers
 
         [Authorize(Roles = "NormalUser,Admin")]
         [HttpPost]
-        public IActionResult Update(UpdateMealDTO mealDTO)
+        public async Task<IActionResult> Update([FromForm] UpdateMealDTO mealDTO, [FromForm] IFormFile image)
         {
+            if(image != null)
+            {
+                await bl.Delete(mealDTO.ImageUrl);
+                var url = await bl.Upload(image);
+                mealDTO.ImageUrl = url;
+            }
             Meal meal = MealFromUpdateMealDTO(mealDTO);
 
             _mealLogic.Update(meal);
