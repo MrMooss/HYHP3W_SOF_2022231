@@ -5,6 +5,7 @@ using MealPlanner.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Diagnostics;
 
 namespace MealPlanner.Controllers
@@ -28,7 +29,9 @@ namespace MealPlanner.Controllers
 
         public IActionResult Index()
         {
+
             return View(_mealLogic.ReadAll());
+            
         }
 
         [Authorize(Roles = "NormalUser,Admin")]
@@ -41,11 +44,22 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public  async Task<IActionResult> Add([FromForm]AddMealDTO mealDTO, [FromForm] IFormFile image)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(mealDTO);
+            }
             var url = await bl.Upload(image);
             mealDTO.ImageUrl = url;
             Meal meal = MealFromAddMealDTO(mealDTO);
-
-            _mealLogic.Create(meal);
+            try
+            {
+                _mealLogic.Create(meal);
+            }
+            catch (Exception e)
+            {
+                return View("Error", e.Message);
+            }
+            
 
             return RedirectToAction(nameof(Index));
         }
@@ -54,6 +68,10 @@ namespace MealPlanner.Controllers
         public IActionResult Update(string ID)
         {
             Meal meal = _mealLogic.Read(ID);
+            if(meal == null)
+            {
+                return View("Error", "No meal found!");
+            }
             UpdateMealDTO mealDTO = UpdateMealDTOFromMeal(meal);
 
             return View(mealDTO);
@@ -63,6 +81,11 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromForm] UpdateMealDTO mealDTO, [FromForm] IFormFile image)
         {
+            ModelState.Remove("image");
+            if (!ModelState.IsValid)
+            {
+                return View(mealDTO);
+            }
             if(image != null)
             {
                 await bl.Delete(mealDTO.ImageUrl);
@@ -71,7 +94,14 @@ namespace MealPlanner.Controllers
             }
             Meal meal = MealFromUpdateMealDTO(mealDTO);
 
-            _mealLogic.Update(meal);
+            try
+            {
+                _mealLogic.Update(meal);
+            }
+            catch (Exception e)
+            {
+                return View("Error", e.Message);
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -80,16 +110,21 @@ namespace MealPlanner.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string ID)
         {
-            await bl.Delete(_mealLogic.Read(ID).ImageUrl);
+            Meal meal = _mealLogic.Read(ID);
+            if(meal == null)
+            {
+                return View("Error", "No meal found!");
+            }
+            await bl.Delete(meal.ImageUrl);
             _mealLogic.Delete(ID);
 
             return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(string message)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(message);
         }
 
         private Meal MealFromAddMealDTO(AddMealDTO mealDTO)
