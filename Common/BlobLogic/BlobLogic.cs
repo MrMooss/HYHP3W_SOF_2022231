@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,18 @@ namespace Common.BlobLogic
             using (FileStream fs = File.OpenRead(path))
             {
                 await blobClient.UploadAsync(fs, true);
+            }
+            blobClient.SetAccessTier(AccessTier.Cool);
+            return blobClient.Uri.AbsoluteUri;
+        }
+
+        public async Task<string> Upload(IFormFile image)
+        {
+            string blobName = Guid.NewGuid().ToString() + image.FileName.Trim();
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            using (var uploadFileStream = image.OpenReadStream())
+            {
+                await blobClient.UploadAsync(uploadFileStream, true);
             }
             blobClient.SetAccessTier(AccessTier.Cool);
             return blobClient.Uri.AbsoluteUri;
