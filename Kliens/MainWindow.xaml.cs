@@ -61,10 +61,10 @@ namespace Kliens
 
             Task.Run(async () =>
             {
-                LoadMeals();
                 userinfo = await GetUserInfo();
             }).Wait();
 
+            LoadMeals();
             usernamebox.Text = userinfo.UserName;
             profpics.Source = GetImage(userinfo.PhotoUrl);
             
@@ -89,9 +89,16 @@ namespace Kliens
             {
                 ObservableCollection<MealDTO> meals = await response.Content.ReadAsAsync<ObservableCollection<MealDTO>>();
 
-                if (meals.Count > 0)
+                if (meals.Count > 0 && userinfo.Roles.Contains("Admin"))
                 {
                     var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
+
+                    ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
+                }
+                else if (meals.Count > 0)
+                {
+                    var viewMealsList = meals.Where(meal => meal.OwnerId == userinfo.Id).Select(meal => ViewMealFromDTO(meal));
 
                     ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
@@ -157,6 +164,7 @@ namespace Kliens
         private async void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)
         {
             e.CreatedEntity.Id = "";
+            e.CreatedEntity.OwnerId = userinfo.Id;
             var response = await client.PostAsJsonAsync("/MealApi", e.CreatedEntity);
             if (response.IsSuccessStatusCode) 
             {
@@ -166,6 +174,7 @@ namespace Kliens
 
         private async void CreateWindow_UpdateEntity(object sender, EntityCreatedEventArgs e)
         {
+            e.CreatedEntity.OwnerId = userinfo.Id;
             var response = await client.PutAsJsonAsync("/MealApi", e.CreatedEntity);
             response.EnsureSuccessStatusCode();
             LoadMeals();
