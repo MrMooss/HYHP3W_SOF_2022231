@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Meal>
+
+@{
+    var sortedMeals = Model.OrderBy(m => m.ConsumptionDate);
+    DateTime? currentDate = null;
+}
+
+<div class="text-center">
+    @foreach (var item in sortedMeals)
+    {
+        if (currentDate != item.ConsumptionDate.Date)
+        {
+            currentDate = item.ConsumptionDate.Date;
+            <hr style="width: 90%; margin: 20px auto;">
+            <h2>@currentDate.Value.ToString("MMMM dd, yyyy")</h2>
+        }
+
+        <div class="meal-card">
+            <img src="@item.ImageUrl" alt="Meal Image">
+            <div class="meal-details">
+                <h3>@item.Name</h3>
+                <p>@item.Description</p>
+            </div>
+            <a href="#" class="view-recipe">View Recipe</a>
+            <div class="recipe-details" style="display: none;">
+                <h3>@item.Recipe.Name</h3>
+                <p>@item.Recipe.Description</p>
+                <div class="button-container">
+                    <a href="/home/update?ID=@item.Id" class="btn btn-primary update-recipe">Update</a>
+                    <a href="/home/delete?ID=@item.Id" class="btn btn-danger delete-recipe">Delete</a>
+                </div>
+                <a href="#" class="hide-recipe">Hide Recipe</a>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.meal-card').on('click', '.view-recipe', function (e) {
+            e.preventDefault();
+            var recipeDetails = $(this).siblings('.recipe-details');
+            var hideRecipeButton = recipeDetails.find('.hide-recipe');
+
+            recipeDetails.show();
+            $(this).hide();
+            hideRecipeButton.show();
+        });
+
+        $('.meal-card').on('click', '.hide-recipe', function (e) {
+            e.preventDefault();
+            var recipeDetails = $(this).parent('.recipe-details');
+            var viewRecipeButton = recipeDetails.siblings('.view-recipe');
+
+            recipeDetails.hide();
+            $(this).hide();
+            viewRecipeButton.show();
+        });
+    });
+</script>

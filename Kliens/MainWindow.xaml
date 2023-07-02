@@ -1,0 +1,54 @@
+﻿<Window x:Class="Kliens.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kliens"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <ListBox x:Name="mealListBox" BorderThickness="0" ItemsSource="{Binding ViewMeals}" SelectedItem="{Binding SelectedMeal}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0,0,0,1" BorderBrush="Black">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" Source="{Binding ImageUrl}" Width="100" Height="100" Margin="10"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="10"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Description}" VerticalAlignment="Center" Margin="10"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </ScrollViewer>
+        <StackPanel Grid.Column="1" Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" x:Name="profpics" Source="https://www.adventisthealth.org/cms/thumbnails/00/1100x506/images/blog/sad.jpg" Width="50" Height="50" Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1" x:Name="usernamebox" Text="Username" VerticalAlignment="Center"/>
+            </Grid>
+            <Button Content="Add" Width="100" Margin="0,10,0,0" Click="AddButton_Click"/>
+            <Button Content="Update" Width="100" Margin="0,10,0,0" Click="UpdateButton_Click"/>
+            <Button Content="Delete" Width="100" Margin="0,10,0,10" Click="DeleteButton_Click"/>
+            <Button Content="Settings" Width="100" Click="ProifleMouseDown" />
+        </StackPanel>
+    </Grid>
+</Window>
