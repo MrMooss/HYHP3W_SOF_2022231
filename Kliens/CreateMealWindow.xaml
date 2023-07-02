@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Kliens"
         xmlns:common="clr-namespace:Common;assembly=Common"
         mc:Ignorable="d"
-        Title="Create" Height="613" Width="500">
-    <Grid Margin="20,20,20,17">
+        Title="Create" Height="613" Width="524">
+    <Grid Margin="20,20,25,17">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>

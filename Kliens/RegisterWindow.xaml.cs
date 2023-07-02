@@ -32,10 +32,9 @@ namespace Kliens
 
         private void LoginButtonClick(object sender, RoutedEventArgs e)
         {
-            LoginWindow windw = new LoginWindow();
-            Close();
-            windw.Show();
-            
+            LoginWindow loginWindow = new LoginWindow();
+            this.Close();
+            loginWindow.ShowDialog();
         }
 
         private async void RegisterButtonClick(object sender, RoutedEventArgs e)
@@ -56,7 +55,9 @@ namespace Kliens
             {
                 var result = MessageBox.Show("Registration succesful", "Info", MessageBoxButton.OK,
                     MessageBoxImage.Information);
-                this.DialogResult = true;
+                LoginWindow loginWindow = new LoginWindow();
+                this.Close();
+                loginWindow.ShowDialog();
             }
         }
 
@@ -69,12 +70,6 @@ namespace Kliens
                 string filename = ofd.FileName;
                 pathToImage.Text = filename;
             }
-        }
-
-        private void OnCloseEvent(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.ShowDialog();
         }
     }
 }
