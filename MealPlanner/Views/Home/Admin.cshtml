@@ -3,14 +3,31 @@
 @inject UserManager<SiteUser> UserManager
 @model IEnumerable<SiteUser>
 
-div class="text-center">
+<div class="text-center">
     <ul>
         @foreach (var item in Model)
         {
+            @if (item.Id != UserManager.GetUserId(User))
+            {
             <li calss="user-list">
                @item.Email
-               
+                @{
+                    var roles = await UserManager.GetRolesAsync(item);
+                    foreach (var role in roles)
+                    {
+                       @role
+                    }
+                }
+                @if(roles.Contains("Admin"))
+                {
+                    <a class="" asp-area="" asp-controller="Home" asp-action="RevokeAdmin" asp-route-id="@item.Id">Revoke admin</a>
+                }
+                else
+                {
+                    <a class="" asp-area="" asp-controller="Home" asp-action="GiveAdmin" asp-route-id="@item.Id">Give admin</a>
+                }
             </li>
+            }
         }
     </ul>
     
