@@ -49,6 +49,7 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public  async Task<IActionResult> Add([FromForm]AddMealDTO mealDTO, [FromForm] IFormFile image)
         {
+            ModelState.Remove("ImageUrl");
             if (!ModelState.IsValid)
             {
                 return View(mealDTO);
@@ -143,6 +144,11 @@ namespace MealPlanner.Controllers
             await _userManager.UpdateAsync(user);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Admin()
+        {
+            return View(_userManager.Users.ToList());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
