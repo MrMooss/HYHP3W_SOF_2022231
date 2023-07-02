@@ -49,6 +49,7 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public  async Task<IActionResult> Add([FromForm]AddMealDTO mealDTO, [FromForm] IFormFile image)
         {
+            ModelState.Remove("ImageUrl");
             if (!ModelState.IsValid)
             {
                 return View(mealDTO);
