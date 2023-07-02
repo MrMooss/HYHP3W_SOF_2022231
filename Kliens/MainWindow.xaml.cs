@@ -22,6 +22,7 @@ using Common.DTOs;
 using Kliens.ViewModel;
 using Common.BlobLogic;
 using static Kliens.LoginWindow;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Kliens
 {
@@ -32,6 +33,9 @@ namespace Kliens
     {
         BlobLogic bl = new BlobLogic();
         private HttpClient client;
+
+        HubConnection hubconn;
+
         public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -64,7 +68,21 @@ namespace Kliens
                 userinfo = await GetUserInfo();
             }).Wait();
 
-            LoadMeals();
+            hubconn = new HubConnectionBuilder().WithUrl("https://localhost:7289/events").Build();
+            hubconn.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await hubconn.StartAsync();
+            };
+
+            hubconn.On<MealDTO>("mealCreated", async t => await Refersh());
+
+            Task.Run(async () =>
+            {
+                await hubconn.StartAsync();
+            }).Wait();
+
+            Refersh();
             usernamebox.Text = userinfo.UserName;
             profpics.Source = GetImage(userinfo.PhotoUrl);
             
@@ -81,32 +99,37 @@ namespace Kliens
             return image;
         }
 
-        private async Task LoadMeals()
+        async Task Refersh()
+        {
+            var meals = new ObservableCollection<MealDTO>(await LoadMeals());
+
+            if (meals.Count > 0 && userinfo.Roles.Contains("Admin"))
+            {
+                var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
+
+                ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
+            }
+            else if (meals.Count > 0)
+            {
+                var viewMealsList = meals.Where(meal => meal.OwnerId == userinfo.Id).Select(meal => ViewMealFromDTO(meal));
+
+                ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
+            }
+        }
+
+        private async Task<IEnumerable<MealDTO>> LoadMeals()
         {
             HttpResponseMessage response = await client.GetAsync("/MealApi");
 
             if (response.IsSuccessStatusCode)
             {
-                ObservableCollection<MealDTO> meals = await response.Content.ReadAsAsync<ObservableCollection<MealDTO>>();
-
-                if (meals.Count > 0 && userinfo.Roles.Contains("Admin"))
-                {
-                    var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
-
-                    ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
-                }
-                else if (meals.Count > 0)
-                {
-                    var viewMealsList = meals.Where(meal => meal.OwnerId == userinfo.Id).Select(meal => ViewMealFromDTO(meal));
-
-                    ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
-                }
+                return await response.Content.ReadAsAsync<ObservableCollection<MealDTO>>();
             }
             else
             {
-                MessageBox.Show("Failed to load meals.");
+                return new ObservableCollection<MealDTO>();
             }
         }
 
@@ -166,10 +189,10 @@ namespace Kliens
             e.CreatedEntity.Id = "";
             e.CreatedEntity.OwnerId = userinfo.Id;
             var response = await client.PostAsJsonAsync("/MealApi", e.CreatedEntity);
-            if (response.IsSuccessStatusCode) 
-            {
-                LoadMeals();
-            }
+            //if (response.IsSuccessStatusCode) 
+            //{
+            //    LoadMeals();
+            //}
         }
 
         private async void CreateWindow_UpdateEntity(object sender, EntityCreatedEventArgs e)

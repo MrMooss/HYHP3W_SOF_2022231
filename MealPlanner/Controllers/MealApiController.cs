@@ -1,9 +1,11 @@
 ﻿using Common.DTOs;
+using MealPlanner.Hubs;
 using MealPlanner.Interfaces;
 using MealPlanner.Logic;
 using MealPlanner.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MealPlanner.Controllers
 {
@@ -14,10 +16,13 @@ namespace MealPlanner.Controllers
         private readonly IMealLogic mealLogic;
         private readonly IRecipeLogic recipeLogic;
 
-        public MealApiController(IMealLogic mealLogic, IRecipeLogic recipeLogic)
+        IHubContext<EventHub> hub;
+
+        public MealApiController(IMealLogic mealLogic, IRecipeLogic recipeLogic, IHubContext<EventHub> hub)
         {
             this.mealLogic = mealLogic;
             this.recipeLogic = recipeLogic;
+            this.hub = hub;
         }
 
         [HttpGet]
@@ -37,7 +42,7 @@ namespace MealPlanner.Controllers
         }
 
         [HttpPost]
-        public void CreateMeal([FromBody] MealDTO mealDTO)
+        public async void CreateMeal([FromBody] MealDTO mealDTO)
         {
             Meal meal = MapDTOToMeal(mealDTO);
             Recipe recipe = new Recipe
@@ -49,7 +54,8 @@ namespace MealPlanner.Controllers
             meal.Recipe = recipe;
 
             mealLogic.Create(meal);
-            //recipeLogic.Create(recipe);
+
+            await hub.Clients.All.SendAsync("mealCreated", meal);
         }
 
         [HttpPut]

@@ -1,4 +1,5 @@
 using MealPlanner.Data;
+using MealPlanner.Hubs;
 using MealPlanner.Interfaces;
 using MealPlanner.Logic;
 using MealPlanner.Models;
@@ -32,6 +33,9 @@ builder.Services.AddDefaultIdentity<SiteUser>(options =>
   .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSignalR();
+
 builder.Services.AddTransient<IMealRepository, MealRepository>();
 builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
 builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
@@ -74,6 +78,7 @@ else
     app.UseHsts();
 }
 
+app.MapHub<EventHub>("/events");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
