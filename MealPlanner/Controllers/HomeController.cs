@@ -146,6 +146,11 @@ namespace MealPlanner.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Admin()
+        {
+            return View(_userManager.Users.ToList());
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(string message)
         {
