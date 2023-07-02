@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Common.BlobLogic;
 
 namespace MealPlanner.Areas.Identity.Pages.Account
 {
@@ -98,6 +99,9 @@ namespace MealPlanner.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Picture")]
+            public IFormFile ProfilePicture { get; set; }
         }
 
 
@@ -114,6 +118,10 @@ namespace MealPlanner.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                BlobLogic bl = new BlobLogic();
+                string url = await bl.Upload(Input.ProfilePicture);
+                user.ProfilePictureUrl = url;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
