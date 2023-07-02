@@ -35,7 +35,8 @@ namespace Common.BlobLogic
 
         public async Task<string> Upload(IFormFile image)
         {
-            string blobName = Guid.NewGuid().ToString() + image.FileName.Trim();
+            string fileName = image.FileName.Replace(" ", "_");
+            string blobName = Guid.NewGuid().ToString() + fileName;
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using (var uploadFileStream = image.OpenReadStream())
             {
