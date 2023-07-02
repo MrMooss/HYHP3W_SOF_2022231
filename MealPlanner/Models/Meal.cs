@@ -18,6 +18,9 @@ namespace MealPlanner.Models
         public DateTime ConsumptionDate { get; set; }
 
         public MealType MealType { get; set; }
+        public string OwnerId { get; set; }
+        [NotMapped]
+        public virtual SiteUser Owner { get; set; }
 
         [NotMapped]
         public virtual Recipe Recipe { get; set; }

@@ -27,10 +27,15 @@ namespace MealPlanner.Controllers
             _recipeLogic = recipeLogic;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            return View(_mealLogic.ReadAll());
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return View(new List<Meal>());
+            else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                return View(_mealLogic.ReadAll());
+            else
+                return View(_mealLogic.ReadAll().Where(t => t.OwnerId == user.Id));
             
         }
 
@@ -51,6 +56,8 @@ namespace MealPlanner.Controllers
             var url = await bl.Upload(image);
             mealDTO.ImageUrl = url;
             Meal meal = MealFromAddMealDTO(mealDTO);
+            var user = await _userManager.GetUserAsync(User);
+            meal.Owner = user;
             try
             {
                 _mealLogic.Create(meal);
