@@ -121,6 +121,23 @@ namespace MealPlanner.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult UpdateProfilePic()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfilePic([FromForm]IFormFile image)
+        {
+            var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
+            await bl.Delete(user.ProfilePictureUrl);
+            var url = await bl.Upload(image);
+            user.ProfilePictureUrl = url;
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(string message)
         {
