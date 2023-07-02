@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using Common;
 using Common.DTOs;
 using Kliens.ViewModel;
+using Common.BlobLogic;
 using static Kliens.LoginWindow;
 
 namespace Kliens
@@ -29,6 +30,7 @@ namespace Kliens
     /// </summary>
     public partial class MainWindow : Window , INotifyPropertyChanged
     {
+        BlobLogic bl = new BlobLogic();
         private HttpClient client;
         public ViewMeal SelectedMeal { get; set; }
         public ObservableCollection<ViewMeal> ViewMeals { get; set; }
@@ -59,10 +61,10 @@ namespace Kliens
 
             Task.Run(async () =>
             {
-                LoadMeals();
                 userinfo = await GetUserInfo();
             }).Wait();
 
+            LoadMeals();
             usernamebox.Text = userinfo.UserName;
             profpics.Source = GetImage(userinfo.PhotoUrl);
             
@@ -73,7 +75,7 @@ namespace Kliens
             BitmapImage image = new BitmapImage();
 
             image.BeginInit();
-            image.UriSource = new Uri("https://scontent.fbud3-1.fna.fbcdn.net/v/t1.6435-1/108772018_3029946947118227_4779291907231442587_n.jpg?stp=dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=7206a8&_nc_ohc=pvI3Kv3TARcAX8WRbOX&_nc_ht=scontent.fbud3-1.fna&oh=00_AfD-z-HHRdfQJ_Vm_Uo4aszp4rRl6lWL3MP1egpfe-W6kA&oe=64C6661D");
+            image.UriSource = new Uri(url);
             image.EndInit();
 
             return image;
@@ -87,9 +89,16 @@ namespace Kliens
             {
                 ObservableCollection<MealDTO> meals = await response.Content.ReadAsAsync<ObservableCollection<MealDTO>>();
 
-                if (meals.Count > 0)
+                if (meals.Count > 0 && userinfo.Roles.Contains("Admin"))
                 {
                     var viewMealsList = meals.Select(meal => ViewMealFromDTO(meal));
+
+                    ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
+                }
+                else if (meals.Count > 0)
+                {
+                    var viewMealsList = meals.Where(meal => meal.OwnerId == userinfo.Id).Select(meal => ViewMealFromDTO(meal));
 
                     ViewMeals = new ObservableCollection<ViewMeal>(viewMealsList);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewMeals"));
@@ -123,6 +132,7 @@ namespace Kliens
         {
             if (mealListBox.SelectedItem is ViewMeal selectedMeal)
             {
+                var aha = await bl.Delete(selectedMeal.ImageUrl);
                 HttpResponseMessage response = await client.DeleteAsync($"/MealApi/{selectedMeal.Id}");
 
                 if (response.IsSuccessStatusCode)
@@ -154,6 +164,7 @@ namespace Kliens
         private async void CreateWindow_EntityCreated(object sender, EntityCreatedEventArgs e)
         {
             e.CreatedEntity.Id = "";
+            e.CreatedEntity.OwnerId = userinfo.Id;
             var response = await client.PostAsJsonAsync("/MealApi", e.CreatedEntity);
             if (response.IsSuccessStatusCode) 
             {
@@ -163,6 +174,7 @@ namespace Kliens
 
         private async void CreateWindow_UpdateEntity(object sender, EntityCreatedEventArgs e)
         {
+            e.CreatedEntity.OwnerId = userinfo.Id;
             var response = await client.PutAsJsonAsync("/MealApi", e.CreatedEntity);
             response.EnsureSuccessStatusCode();
             LoadMeals();
@@ -183,6 +195,20 @@ namespace Kliens
             };
             
             return vm;
+        }
+
+        private void ProifleMouseDown(object sender, RoutedEventArgs e)
+        {
+            RegisterViewModel ui = new RegisterViewModel
+            {
+                UserEmail = userinfo.Email,
+                PhotoUrl = userinfo.PhotoUrl.ToString(),
+                UserName = userinfo.UserName
+                
+            };
+
+            ProfileSettings profileSettings = new ProfileSettings(ui, token, this);
+            profileSettings.Show();
         }
     }
 }

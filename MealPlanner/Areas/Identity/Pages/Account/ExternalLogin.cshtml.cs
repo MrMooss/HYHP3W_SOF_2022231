@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Collections;
+using Common.BlobLogic;
 
 namespace MealPlanner.Areas.Identity.Pages.Account
 {
@@ -30,6 +33,7 @@ namespace MealPlanner.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<SiteUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        BlobLogic bl = new BlobLogic();
 
         public ExternalLoginModel(
             SignInManager<SiteUser> signInManager,
@@ -85,6 +89,8 @@ namespace MealPlanner.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            public string PictureUrl { get; set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -132,7 +138,8 @@ namespace MealPlanner.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        PictureUrl = "https://graph.facebook.com/" + info.Principal.FindFirstValue(ClaimTypes.NameIdentifier) + "/picture?type=square"
                     };
                 }
                 return Page();
@@ -153,6 +160,13 @@ namespace MealPlanner.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                var wc = new WebClient();
+                var data = wc.DownloadData(Input.PictureUrl);
+                var stream = new MemoryStream(data);
+                IFormFile file = new FormFile(stream, 0, data.Length, "Input.PictureUrl", Input.Email);
+                var url = await bl.Upload(file);
+                user.ProfilePictureUrl = url;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

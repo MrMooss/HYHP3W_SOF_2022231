@@ -4,18 +4,16 @@ using MealPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MealPlanner.Data.Migrations
+namespace MealPlanner.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230626165316_seed_data")]
-    partial class seed_data
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,19 +45,26 @@ namespace MealPlanner.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Meals");
 
                     b.HasData(
                         new
                         {
-                            Id = "a3969a54-99f4-4dca-a725-fbd91c7c61b6",
+                            Id = "8beeb6ce-114b-4612-9b83-0757f9c296a3",
                             ConsumptionDate = new DateTime(2023, 6, 1, 7, 22, 16, 0, DateTimeKind.Unspecified),
                             Description = "Nagyon teszt",
-                            ImageUrl = "a3969a54-99f4-4dca-a725-fbd91c7c61b6_Test Meal",
+                            ImageUrl = "https://sofs.blob.core.windows.net/pictures/kép_2023-07-02_153831454.png",
                             MealType = 0,
-                            Name = "Test Meal"
+                            Name = "Test Meal",
+                            OwnerId = "3d201b37-7344-4be7-b792-828786adb6bd"
                         });
                 });
 
@@ -90,10 +95,98 @@ namespace MealPlanner.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d270f8f3-3c6e-4dba-b8bc-5744410617db",
+                            Id = "ef2627d2-528a-41d6-8d02-cf62ebae4c8a",
                             Description = "Teszt recept leírása",
-                            MealId = "a3969a54-99f4-4dca-a725-fbd91c7c61b6",
+                            MealId = "8beeb6ce-114b-4612-9b83-0757f9c296a3",
                             Name = "Test Recipe"
+                        });
+                });
+
+            modelBuilder.Entity("MealPlanner.Models.SiteUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3d201b37-7344-4be7-b792-828786adb6bd",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "03d814ae-6eff-4c84-9762-33370910c405",
+                            Email = "test@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TEST@TEST.COM",
+                            NormalizedUserName = "TEST@TEST.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAELfvNaYeGrj8jQ9z3DlluXVEPwtTgP+gA7aNK/dTX04ZF8oKANmxn/WwsozIMlI3QQ==",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "https://sofs.blob.core.windows.net/pictures/1f972.png",
+                            SecurityStamp = "9ed7d835-be2a-438c-8e2c-b89e1ca47d24",
+                            TwoFactorEnabled = false,
+                            UserName = "test@test.com"
                         });
                 });
 
@@ -163,77 +256,6 @@ namespace MealPlanner.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -296,6 +318,13 @@ namespace MealPlanner.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "3d201b37-7344-4be7-b792-828786adb6bd",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -319,33 +348,15 @@ namespace MealPlanner.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MealPlanner.Models.SiteUser", b =>
+            modelBuilder.Entity("MealPlanner.Models.Meal", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+                    b.HasOne("MealPlanner.Models.SiteUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("SiteUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "323b36d2-ede2-4c14-8d6e-19b5c2eb5516",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d6c47f8c-da63-4188-9195-9968a10081d3",
-                            Email = "test@test.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "TESTUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKgzLbvY/knWql5DXGcvjPKXYvWj9Eh9Dkt8tG08HK023K2RVl+otMLCsyAOuRAdrA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "160ec5f7-455b-4392-ad54-795eb11b484b",
-                            TwoFactorEnabled = false,
-                            UserName = "testuser",
-                            ProfilePictureUrl = "323b36d2-ede2-4c14-8d6e-19b5c2eb5516_testuser"
-                        });
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("MealPlanner.Models.Recipe", b =>
@@ -368,7 +379,7 @@ namespace MealPlanner.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("MealPlanner.Models.SiteUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -377,7 +388,7 @@ namespace MealPlanner.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("MealPlanner.Models.SiteUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -392,7 +403,7 @@ namespace MealPlanner.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("MealPlanner.Models.SiteUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -401,7 +412,7 @@ namespace MealPlanner.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("MealPlanner.Models.SiteUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

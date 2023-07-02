@@ -2,6 +2,7 @@
 using MealPlanner.Interfaces;
 using MealPlanner.Logic;
 using MealPlanner.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealPlanner.Controllers
@@ -83,6 +84,7 @@ namespace MealPlanner.Controllers
         {
             return new MealDTO
             {
+                OwnerId = meal.OwnerId,
                 Id = meal.Id,
                 Name = meal.Name,
                 Description = meal.Description,
@@ -101,6 +103,7 @@ namespace MealPlanner.Controllers
         private Meal MapDTOToMeal(MealDTO mealDTO, Meal existingMeal = null)
         {
             Meal meal = existingMeal ?? new Meal();
+            meal.OwnerId = mealDTO.OwnerId;
             meal.Name = mealDTO.Name;
             meal.Description = mealDTO.Description;
             meal.ImageUrl = mealDTO.ImageUrl;

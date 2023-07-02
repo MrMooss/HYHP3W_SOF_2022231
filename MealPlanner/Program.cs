@@ -3,8 +3,10 @@ using MealPlanner.Interfaces;
 using MealPlanner.Logic;
 using MealPlanner.Models;
 using MealPlanner.Repositories;
+using MealPlanner.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -19,7 +21,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<SiteUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 8;
     options.Password.RequireNonAlphanumeric = false;
@@ -34,6 +36,7 @@ builder.Services.AddTransient<IMealRepository, MealRepository>();
 builder.Services.AddTransient<IRecipeRepository, RecipeRepository>();
 builder.Services.AddTransient<IRecipeLogic, RecipeLogic>();
 builder.Services.AddTransient<IMealLogic, MealLogic>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 builder.Services.AddAuthentication()
@@ -51,6 +54,11 @@ builder.Services.AddAuthentication()
         IssuerSigningKey = new SymmetricSecurityKey
       (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"))
     };
+})
+.AddFacebook(options =>
+{
+    options.AppId = "101270333031715";
+    options.AppSecret = "9feb28706027f90f7313a3c6ce541bfe";
 });
 
 builder.Services.AddAuthorization();

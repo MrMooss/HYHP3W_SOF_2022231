@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kliens"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="280" Width="400" ResizeMode="NoResize"
-        Closing="OnCloseEvent">
+        Title="RegisterWindow" Height="311" Width="400" ResizeMode="NoResize">
     <Grid Margin="0,0,0,4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
