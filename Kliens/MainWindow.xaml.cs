@@ -187,5 +187,19 @@ namespace Kliens
             
             return vm;
         }
+
+        private void ProifleMouseDown(object sender, RoutedEventArgs e)
+        {
+            RegisterViewModel ui = new RegisterViewModel
+            {
+                UserEmail = userinfo.Email,
+                PhotoUrl = userinfo.PhotoUrl.ToString(),
+                UserName = userinfo.UserName
+                
+            };
+
+            ProfileSettings profileSettings = new ProfileSettings(ui, token, this);
+            profileSettings.Show();
+        }
     }
 }

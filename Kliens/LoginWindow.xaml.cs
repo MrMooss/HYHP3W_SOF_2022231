@@ -40,12 +40,20 @@ namespace Kliens
                 UserEmail = emailTextBox.Text,
                 Password = passwordBox.Password
             });
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsAsync<TokenModel>();
+                token.Expiration = token.Expiration.ToLocalTime();
 
-            var token = await response.Content.ReadAsAsync<TokenModel>();
-            token.Expiration = token.Expiration.ToLocalTime();
-
-            MainWindow mw = new MainWindow(token);
-            mw.ShowDialog();
+                MainWindow mw = new MainWindow(token);
+                this.Close();
+                mw.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Invalid email or password");
+            }
+            
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

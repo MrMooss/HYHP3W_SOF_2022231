@@ -46,8 +46,9 @@
                 <TextBlock Grid.Column="1" x:Name="usernamebox" Text="Username" VerticalAlignment="Center"/>
             </Grid>
             <Button Content="Add" Width="100" Margin="0,10,0,0" Click="AddButton_Click"/>
-            <Button Content="Update" Width="100" Margin="0,10,0,10" Click="UpdateButton_Click"/>
-            <Button Content="Delete" Width="100" Click="DeleteButton_Click"/>
+            <Button Content="Update" Width="100" Margin="0,10,0,0" Click="UpdateButton_Click"/>
+            <Button Content="Delete" Width="100" Margin="0,10,0,10" Click="DeleteButton_Click"/>
+            <Button Content="Settings" Width="100" Click="ProifleMouseDown" />
         </StackPanel>
     </Grid>
 </Window>

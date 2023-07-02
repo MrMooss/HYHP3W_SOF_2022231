@@ -104,13 +104,13 @@ namespace MealPlanner.Controllers
             return BadRequest();
         }
 
-        [Route("[action]")]
-        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] RegisterModel model)
         {
             var user = _userManager.Users.FirstOrDefault(t => t.Email == this.User.Identity.Name);
             user.Email = model.UserEmail;
-            user.UserName = model.UserName;
+            user.UserName = model.UserEmail;
             user.ProfilePictureUrl = model.PhotoUrl;
             if (!(model.Password == null || model.Password.Length == 0))
             {
