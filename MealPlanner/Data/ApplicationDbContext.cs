@@ -30,8 +30,9 @@ namespace MealPlanner.Data
                 Email = "test@test.com",
                 EmailConfirmed = true,
                 UserName = "test@test.com",
+                NormalizedEmail = "TEST@TEST.COM",
                 NormalizedUserName = "TEST@TEST.COM",
-                ProfilePictureUrl = $"{ID}_test@test.com"
+                ProfilePictureUrl = "https://sofs.blob.core.windows.net/pictures/1f972.png"
             };
             testUser.PasswordHash = ph.HashPassword(testUser, "password");
             builder.Entity<SiteUser>().HasData(testUser);
@@ -48,7 +49,7 @@ namespace MealPlanner.Data
                 Id = mealId,
                 Name = "Test Meal",
                 Description = "Nagyon teszt",
-                ImageUrl = $"{mealId}_Test Meal",
+                ImageUrl = "https://sofs.blob.core.windows.net/pictures/kép_2023-07-02_153831454.png",
                 ConsumptionDate = DateTime.Parse("06/01/2023 07:22:16"),
                 MealType = MealType.Breakfast,
                 OwnerId = testUser.Id

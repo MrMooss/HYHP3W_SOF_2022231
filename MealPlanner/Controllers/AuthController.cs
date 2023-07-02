@@ -82,6 +82,7 @@ namespace MealPlanner.Controllers
             {
                 return Ok(new
                 {
+                    Id = user.Id,
                     UserName = user.UserName,
                     Email = user.Email,
                     PhotoUrl = user.ProfilePictureUrl,
