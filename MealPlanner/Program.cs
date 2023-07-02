@@ -54,6 +54,11 @@ builder.Services.AddAuthentication()
         IssuerSigningKey = new SymmetricSecurityKey
       (Encoding.UTF8.GetBytes("nagyonhosszutitkoskodhelye"))
     };
+})
+.AddFacebook(options =>
+{
+    options.AppId = "101270333031715";
+    options.AppSecret = "9feb28706027f90f7313a3c6ce541bfe";
 });
 
 builder.Services.AddAuthorization();
