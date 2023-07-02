@@ -50,7 +50,8 @@ namespace MealPlanner.Data
                 Description = "Nagyon teszt",
                 ImageUrl = $"{mealId}_Test Meal",
                 ConsumptionDate = DateTime.Parse("06/01/2023 07:22:16"),
-                MealType = MealType.Breakfast
+                MealType = MealType.Breakfast,
+                OwnerId = testUser.Id
             };
 
             Recipe recipeForMeal1 = new Recipe
@@ -67,6 +68,12 @@ namespace MealPlanner.Data
                 .HasOne(t => t.Recipe)
                 .WithOne()
                 .HasForeignKey<Recipe>(t => t.MealId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Meal>()
+                .HasOne(t => t.Owner)
+                .WithMany()
+                .HasForeignKey(t => t.OwnerId)
                 .OnDelete(DeleteBehavior.Cascade);
             base.OnModelCreating(builder);
         }
