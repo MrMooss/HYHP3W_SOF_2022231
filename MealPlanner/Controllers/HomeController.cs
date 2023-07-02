@@ -101,6 +101,8 @@ namespace MealPlanner.Controllers
                 mealDTO.ImageUrl = url;
             }
             Meal meal = MealFromUpdateMealDTO(mealDTO);
+            var user = await _userManager.GetUserAsync(User);
+            meal.Owner = user;
 
             try
             {
@@ -149,6 +151,24 @@ namespace MealPlanner.Controllers
         public IActionResult Admin()
         {
             return View(_userManager.Users.ToList());
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GiveAdmin(string id)
+        {
+            var user = _userManager.Users.FirstOrDefault(t => t.Id == id);
+            await _userManager.AddToRoleAsync(user, "Admin");
+
+            return RedirectToAction(nameof(Admin));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RevokeAdmin(string id)
+        {
+            var user = _userManager.Users.FirstOrDefault(t => t.Id == id);
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
+
+            return RedirectToAction(nameof(Admin));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
