@@ -1,11 +1,10 @@
-rendelkezik API végponttal is - Szabó Attila 3
-rendelkezik API kliensalkalmazással is, amelyen valamilyen rész-adatok megjelennek (pl. aggregált adat, statisztika) -Szabó Attila 5
-tartalmaz kép kezelést (feltöltés/listázás) - Szabó Attila 3
+rendelkezik API végponttal is - Szabó Attila
+rendelkezik API kliensalkalmazással is, amelyen valamilyen rész-adatok megjelennek (pl. aggregált adat, statisztika) -Szabó Attila
+tartalmaz kép kezelést (feltöltés/listázás) - Szabó Attila
 használ valamilyen SQL-től eltérő adatbázist (is) pl. cassandra, mongodb, blobstorage, stb. - Szabó Attila
 használ email küldést a regisztrációk megerősítésére és/vagy bizonyos események teljesülésekor a felhasználók értesítésére - Erőss Gergő
 használ social login providert is a belépéshez - Erőss Gergő
 profilkép kezelést tartalmaz, social login provider esetén letölti onnan a képet - Erőss Gergő
 használ valamilyen külső CSS library-t (pl. bootstrap) és az oldal felépítése során legalább 3 különböző komponenst vett onnan igénybe - Erőss Gergő
 a logic rétegben használ valamilyen tanult tervezési mintát 3p/pattern  - DTO - Szabó Attila
-valamelyik view-ban használ önállóan írt JS kódot (pl. egy űrlapelemhez autocomplete szerveroldalról letöltött adatokkal)
 reszponzívan jelenik meg telefonról nézve 5
