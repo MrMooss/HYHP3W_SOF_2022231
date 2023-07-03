@@ -101,8 +101,8 @@ namespace MealPlanner.Controllers
                 mealDTO.ImageUrl = url;
             }
             Meal meal = MealFromUpdateMealDTO(mealDTO);
-            var user = await _userManager.GetUserAsync(User);
-            meal.Owner = user;
+            var user = _mealLogic.Read(mealDTO.Id);
+            meal.Owner = user.Owner;
 
             try
             {
