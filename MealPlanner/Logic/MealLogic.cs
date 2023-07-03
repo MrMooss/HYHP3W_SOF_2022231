@@ -65,6 +65,7 @@ namespace MealPlanner.Logic
                 var res = _mealRepository.Read(entity.Id);
                 if (res != null)
                 {
+                    res.OwnerId = res.OwnerId;
                     res.Owner = res.Owner;
                     res.Description = entity.Description;
                     res.Name = entity.Name;
