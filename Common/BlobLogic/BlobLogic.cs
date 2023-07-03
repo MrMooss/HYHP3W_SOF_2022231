@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Common.BlobLogic
@@ -23,7 +24,9 @@ namespace Common.BlobLogic
         {
 
             string filename = Path.GetFileName(path);
-            string blobName = Guid.NewGuid().ToString() + filename;
+            string ret = Regex.Replace(filename.Trim(), "[^A-Za-z0-9]+", "");
+            ret.Replace(" ", String.Empty);
+            string blobName = Guid.NewGuid().ToString() + ret;
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using (FileStream fs = File.OpenRead(path))
             {
@@ -35,7 +38,9 @@ namespace Common.BlobLogic
 
         public async Task<string> Upload(IFormFile image)
         {
-            string fileName = image.FileName.Replace(" ", "_");
+            string fileName = image.FileName;
+            String ret = Regex.Replace(fileName.Trim(), "[^A-Za-z0-9]+", "");
+            ret.Replace(" ", String.Empty);
             string blobName = Guid.NewGuid().ToString() + fileName;
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using (var uploadFileStream = image.OpenReadStream())

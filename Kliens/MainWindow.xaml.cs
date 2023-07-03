@@ -47,7 +47,7 @@ namespace Kliens
             token = tokenModel;
 
             client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:7289");
+            client.BaseAddress = new Uri("https://mealcalendar.azurewebsites.net");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
               new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -209,6 +209,13 @@ namespace Kliens
 
             ProfileSettings profileSettings = new ProfileSettings(ui, token, this);
             profileSettings.Show();
+        }
+
+        private void LogOutClick(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            this.Close();
+            loginWindow.Show();
         }
     }
 }
