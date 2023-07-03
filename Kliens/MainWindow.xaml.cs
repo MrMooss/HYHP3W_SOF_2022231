@@ -174,7 +174,7 @@ namespace Kliens
 
         private async void CreateWindow_UpdateEntity(object sender, EntityCreatedEventArgs e)
         {
-            e.CreatedEntity.OwnerId = userinfo.Id;
+            e.CreatedEntity.OwnerId = SelectedMeal.ownerid;
             var response = await client.PutAsJsonAsync("/MealApi", e.CreatedEntity);
             response.EnsureSuccessStatusCode();
             LoadMeals();
@@ -184,6 +184,7 @@ namespace Kliens
         {
             ViewMeal vm = new ViewMeal()
             {
+                ownerid = meal.OwnerId,
                 Id = meal.Id,
                 Name = meal.Name,
                 Description = meal.Description,
@@ -216,6 +217,11 @@ namespace Kliens
             LoginWindow loginWindow = new LoginWindow();
             this.Close();
             loginWindow.Show();
+        }
+
+        private void RefershButton(object sender, RoutedEventArgs e)
+        {
+            LoadMeals();
         }
     }
 }

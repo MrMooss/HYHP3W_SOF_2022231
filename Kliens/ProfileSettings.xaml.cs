@@ -115,8 +115,10 @@ namespace Kliens
                 if (res.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Successful delete");
+                    LoginWindow login = new LoginWindow();
                     main.Close();
                     this.Close();
+                    login.Show();
 
                 }
             }
