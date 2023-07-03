@@ -170,9 +170,10 @@ namespace MealPlanner.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                await _userManager.AddToRoleAsync(user, "NormalUser");
+                
 
                 var result = await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, "NormalUser");
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);
